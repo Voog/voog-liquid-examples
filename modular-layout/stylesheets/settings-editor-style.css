@@ -1,0 +1,173 @@
+.layout_settings-btn button {
+  z-index: 105;
+  padding: 8px 16px !important;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+  -webkit-transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+       -o-transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+          transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+  -webkit-perspective: 1000;
+          perspective: 1000;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.layout_settings-btn button:hover, .layout_settings-btn button.active {
+  color: #443df6 !important;
+  background-color: rgba(68, 61, 246, 0.1) !important;
+}
+
+.layout_settings-btn button:hover.edy-cbtn > span > span, .layout_settings-btn button.active.edy-cbtn > span > span {
+  color: #443df6 !important;
+}
+
+.layout_settings-btn button:hover.edy-cbtn > span > span .grey, .layout_settings-btn button.active.edy-cbtn > span > span .grey {
+  color: #443df6 !important;
+}
+
+.layout_settings-visible .layout_settings-btn button {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.layout_settings-btn button.edy-cbtn {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  width: 100%;
+}
+
+.layout_settings-btn button.edy-cbtn > span:before, .layout_settings-btn button.edy-cbtn > div:before {
+  content: none !important;
+}
+
+.layout_settings-btn button.edy-cbtn > span > span {
+  color: #000000 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  font-family: "Avenir Next", sans-serif !important;
+  line-height: 20px !important;
+  text-align: left;
+}
+
+.layout_settings-btn button.edy-cbtn > span > span .bold {
+  font-weight: 600 !important;
+  line-height: 24px !important;
+}
+
+.layout_settings-btn button .edy-cbtn-content span:last-child {
+  margin-right: 0;
+}
+
+.layout_settings-btn button.edy-cbtn .edy-cbtn-ico {
+  display: none;
+}
+
+.layout_settings-popover {
+  position: fixed;
+  background: #ffffff;
+  -webkit-transform-origin: 100% 90%;
+      -ms-transform-origin: 100% 90%;
+          transform-origin: 100% 90%;
+  bottom: 72px;
+  padding: 8px 0;
+  right: 224px;
+  z-index: 56501;
+  opacity: 0;
+  -webkit-transition: opacity 300ms;
+  -o-transition: opacity 300ms;
+  transition: opacity 300ms;
+  -webkit-transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+       -o-transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+          transition-timing-function: cubic-bezier(0, 0.6, 0.25, 1);
+  -webkit-perspective: 1000;
+          perspective: 1000;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  pointer-events: none;
+}
+
+body .layout_settings-popover .edy-cbtn > span > span,
+body .layout_settings-popover .edy-cbtn > span > div,
+body .layout_settings-popover .edy-cbtn > div > span,
+body .layout_settings-popover .edy-cbtn > div > div {
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.edy-bar-open .layout_settings-popover {
+  bottom: 200px;
+}
+
+.layout_settings-visible .layout_settings-popover {
+  pointer-events: all;
+  opacity: 1;
+  -webkit-box-shadow: 0 25px 35px rgba(0, 0, 0, 0.03), 0 0 5px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 25px 35px rgba(0, 0, 0, 0.03), 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+@media screen and (max-width: 768px) {
+  .layout_settings-popover {
+    right: 0;
+  }
+}
+
+.layout_settings-arrow {
+  position: absolute;
+  pointer-events: none;
+  bottom: 0;
+  right: 126px;
+}
+
+@media screen and (max-width: 768px) {
+  .layout_settings-arrow {
+    right: 72px;
+  }
+}
+
+.layout_settings-arrow:after {
+  position: absolute;
+  z-index: 56501;
+  width: 0;
+  height: 0;
+  margin-left: -16px;
+  pointer-events: none;
+  border: solid transparent;
+  border-color: transparent;
+  border-width: 16px;
+  content: '';
+}
+
+.layout_settings-arrow:after {
+  border-top-color: #ffffff;
+  -webkit-filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.05));
+          filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.05));
+}
+
+.layout_settings-close {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  background-image: url("../assets/ico-close.svg");
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 57001;
+}
+
+.layout_settings-close:hover {
+  opacity: .7;
+}
+
+.grey {
+  color: #8d9091;
+}
+
+.d-none {
+  display: none !important;
+}
