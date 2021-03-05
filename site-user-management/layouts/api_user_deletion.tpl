@@ -10,6 +10,10 @@
         font-size: 16px;
       }
 
+      tr {
+        height: 100%;
+      }
+
       td,
       th {
         border: 1px solid #dddddd;
@@ -20,164 +24,228 @@
       table {
         table-layout: fixed;
         border-collapse: collapse;
-        width: 50%;
       }
 
-      .userList {
+      .user-list {
         padding-top: 16px;
       }
 
-      .searchForUser {
+      .search-user {
         padding-top: 32px;
       }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {% if editmode or site.has_many_languages? %}
+      {% assign lang-enabled = "lang-enabled" %}
+    {% endif %}
+
+    {% if flags_state %}
+      {% assign flags="flags-enabled" %}
+    {% else %}
+      {% assign flags="flags-disabled" %}
+    {% endif %}
+
+    {% if editor_locale == 'et' %}
+      {% assign str_add_email = "Soovid lisada e-posti aadressi? " %}
+      {% assign str_add = "Lisa" %}
+      {% assign str_search_email = "Soovid otsida kasutajat? " %}
+      {% assign str_insert_email = "Sisesta e-posti aadress" %}
+    {% else %}
+      {% assign str_add_email = "Add an e-mail address: " %}
+      {% assign str_add = "Add" %}
+      {% assign str_search_email = "Search for an e-mail: " %}
+      {% assign str_insert_email = "Insert an e-mail" %}
+    {% endif %}
+
   </head>
 
-  <body class="content-page{% if editmode or site.has_many_languages? %} lang-enabled{% endif %} {% if flags_state %}flags-enabled{% else %}flags-disabled{% endif %}">
-
+  <body class="content-page {{ lang-enabled }} {{ flags }}">
     <div class="container">
       {% include "header" %}
-      <section class="content-header content-formatted cfx" data-search-indexing-allowed="true"></section>
+
+      <section class="content-header content-formatted cfx"></section>
+
       <main class="content" role="main">
-        
-        <div class="addUser">
-          <label for="email">
-            {% if editor_locale == 'et'%}Soovid lisada e-posti aadressi?:{% else %}Add an e-mail address:{% endif %}
-          </label>
+        <div class="add-user">
 
-          <input 
-            type="email" 
-            id="emailToBeAdded" 
-            name="email" 
-            placeholder="kasutaja@email.com"
-          >
+          <label for="email">{{ str_add_email }}</label>
+          <input type="email" id="email-to-add" name="email" placeholder="email@email.com">
 
-          <input 
-            type="submit" 
-            value="{% if page.language_code == 'et'%}Lisa{% else %}Add{% endif %}" 
-            id="addUser"
-          ><br>
+          <input type="submit" value="{{ str_add }}" id="add-user"><br>
+        </div>
+
+
+        <div class="search-user">
+
+          <label for="search">{{ str_search_email }}</label>
+          <input id="search" type="text" placeholder="{{ str_insert_email }}" />
 
         </div>
 
-        <div class="searchForUser">
-          <label for="search">
-            {% if editor_locale == 'et'%}Soovid otsida kasutajat?:{% else %}Search for an e-mail:{% endif %}
-          </label>
-          <input 
-            id="search" 
-            type="text" 
-            placeholder="{% if editor_locale == 'et' %}Sisesta e-posti aadress{% else %}Insert an e-mail{% endif %}"
-          />
-        </div>
-        <div class="userList"></div>
+        <div class="user-list"></div>
+
       </main>
       {% include "footer" %}
     </div>
 
 
     <script>
-      const language = document.getElementsByTagName('html')[0].getAttribute('lang');
-
-      let emailTable = 'E-posti aadress'
-      let addButton = 'Lisa'
-      let deleteUser = 'Kustuta kasutaja'
-      let deleteButton = 'Kustuta'
-      let confirmText = 'Oled sa kindel, et soovid seda kasutajat kustutada?'
-      let userDeleted = 'Kasutaja kustutatud!'
-      let userExists = 'Kasutaja on juba olemas!'
-      let userAdded = 'Kasutaja lisatud!'
-      if (language == 'en') {
-          emailTable = 'E-mail address'
-          addButton = 'Add'
-          deleteUser = 'Delete user'
-          deleteButton = 'Delete'
-          confirmText = 'Are you sure you want to delete this account?'
-          userDeleted = 'User deleted!'
-          userExists = 'User already exists!'
-          userAdded = 'User added!'
+      // Translations for the JS part
+      const translationStrings = {
+          'et': {
+              emailAddress: 'E-posti aadress',
+              deleteUser: 'Kustuta kasutaja',
+              deleteButton: 'Kustuta',
+              confirmText: 'Oled sa kindel, et soovid seda kasutajat kustutada?',
+              userDeleted: 'Kasutaja kustutatud!',
+              userExists: 'Kasutaja on juba olemas!',
+              userAdded: 'Kasutaja lisatud!',
+              userNotInserted: "E-posti aadressi ei ole sisestatud!",
+              notValidEmail: "Sisestatud e-posti aadress on ebasobiv!",
+              somethingWentWrong: "Midagi läks valesti, proovi uuesti!"
+          },
+          'en': {
+              emailAddress: 'E-mail address',
+              deleteUser: 'Delete user',
+              deleteButton: 'Delete',
+              confirmText: 'Are you sure you want to delete this account?',
+              userDeleted: 'User deleted!',
+              userExists: 'User already exists!',
+              userAdded: 'User added!',
+              userNotInserted: "E-mail address is not inserted",
+              notValidEmail: "The entered e-mail address is not valid!",
+              somethingWentWrong: "Something went wrong, try again!"
+          }
       }
 
-      /* Tabeli filtreerimine ja otsing */
+      let language = document.getElementsByTagName('html')[0].getAttribute('lang');
+      let tr = key => (translationStrings[language] || {})[key];
+
+      const translatedEmailAddress = tr('emailAddress');
+      const translatedDeleteUser = tr('deleteUser');
+      const translatedDeleteButton = tr('deleteButton');
+      const translatedConfirmText = tr('confirmText');
+      const translatedUserDeleted = tr('userDeleted');
+      const translatedUserExists = tr('userExists');
+      const translatedUserAdded = tr('userAdded');
+      const translatedUserNotInserted = tr('userNotInserted');
+      const translatedNotValidEmail = tr('notValidEmail');
+      const translatedSomethingWentWrong = tr('somethingWentWrong');
+
+      let allUsers = [];
+
+      /* Filter the table during searching */
       $(document).ready(function () {
-        $("#search").on("keyup", function () {
+          $('#search').on('keyup', function () {
 
-          let value = $(this).val().toLowerCase();
+              const value = $(this).val().toLowerCase();
 
-          $("#userTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              $('#user-table tr').each(function () {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+              });
           });
-        });
       });
 
-      /* Lisab kõik kasutajad pärast GET-requesti tabelisse */
+      /* Add all the users to the table based on a GET-request */
       function getUsers() {
-        $.ajax({
-          type: 'GET',
-          contentType: 'application/json',
-          url: '/admin/api/site_users',
-          dataType: 'json'
-        }).then(function (users) {
-          let list_html = "<table><thead><tr><th>" + emailTable + 
-          "</th><th>" + deleteUser + 
-          "</th></thead>";
+          $.ajax({
+              type: 'GET',
+              contentType: 'application/json',
+              url: '/admin/api/site_users',
+              dataType: 'json'
+          }).then(function (users) {
 
-          users.forEach((user) => {
-            list_html += "<tbody id='userTable'><tr><td>" + user.email +
-              "</td><td><button class='delete' data-id=" + user.id + 
-              ">" + deleteButton + 
-              "</button></td></tr>";
-          });
+              // Make a table
 
-          list_html += "</tbody></table>"
-          $(".userList").html(list_html);
-        });
+              let list_html = `<table>
+                    <thead>
+                      <tr>
+                        <th>${translatedEmailAddress}</th>
+                        <th>${translatedDeleteUser}</th>
+                      </tr>
+                    </thead>`;
+
+              // Add each user to the table
+
+              users.forEach((user) => {
+                  list_html += `<tbody id='user-table'>
+                        <tr>
+                          <td>${user.email}</td>
+                          <td>
+                            <button class='delete' data-id='${user.id}'>${translatedDeleteButton}</button>
+                          </td>
+                        </tr>`;
+                  allUsers.push(user.email);
+              })
+
+              list_html += '</tbody></table>';
+              $('.user-list').html(list_html);
+          }).catch(function () {
+              alert(translatedSomethingWentWrong);
+          });;
       }
+
       getUsers();
 
-      /* Kustutab kasutaja ja uuendab tabelit */
+      /* Delete the user and renew the table */
       $(document).on('click', '.delete', function (e) {
 
-        let entry = $(this).parent().parent(); // Vali tabeli rida
+          let entry = $(this).parent().parent(); // Choose the row of the table
 
-        let id = $(this)[0].attributes['data-id'].value; // User ID delete nupust
+          let id = $(this)[0].attributes['data-id'].value; // Get the User ID from the delete button
 
-        if (confirm(confirmText)) {
-          $.ajax({
-            type: 'DELETE',
-            contentType: 'application/json',
-            url: '/admin/api/site_users/' + id,
-            dataType: 'json'
-          }).then(function () {
-            entry.remove();
-            alert(userDeleted)
-          });
-        }
+          if (confirm(translatedConfirmText)) {
+              $.ajax({
+                  type: 'DELETE',
+                  contentType: 'application/json',
+                  url: '/admin/api/site_users/' + id,
+                  dataType: 'json'
+              }).then(function () {
+                  entry.remove();
+                  alert(translatedUserDeleted)
+              }).catch(function () {
+                  alert(translatedSomethingWentWrong);
+              });
+          }
       });
 
-      /* Lisab kasutaja ja uuendab tabelit */
-      $(document).on('click', "#addUser", function (e) {
+      /* Add an user and renew the table */
+      $(document).on('click', "#add-user", function (e) {
 
-        let emailAddress = $("#emailToBeAdded")[0].value;
+          let emailAddressToAdd = $('#email-to-add')[0].value; // Get the email from the input
+          const regexp = /^([\w\d._\-#])+@([\w\d._\-#]+[.][\w\d._\-#]+)+$/; // Validate e-mail address
 
-        $.ajax({
-          type: 'POST',
-          contentType: 'application/json',
-          url: '/admin/api/site_users',
-          dataType: 'json',
-          data: "{\"email\" : \"" + emailAddress + "\"}",
-          error: function (jqXHR) {
-            if (jqXHR.status === 422) {
-              alert(userExists)
-            }
+          if (emailAddressToAdd === '') {
+              alert(translatedUserNotInserted);
+          } else if (emailAddressToAdd.match(regexp)) {
+              $.ajax({
+                  type: 'POST',
+                  contentType: 'application/json',
+                  url: '/admin/api/site_users',
+                  dataType: 'json',
+                  data: `{\"email\" : \"${emailAddressToAdd}\"}`,
+              }).then(function () {
+                  alert(translatedUserAdded)
+                  getUsers();
+              }).catch(function (jqXHR) {
+                  if (jqXHR.status === 422) {
+                      getUsers();
+                      if (allUsers.includes(emailAddressToAdd)) {
+                          alert(translatedUserExists);
+                      }
+                  } else {
+                      alert(translatedSomethingWentWrong);
+                  }
+              });
+          } else {
+              alert(translatedNotValidEmail);
           }
-        }).then(function () {
-          alert(userAdded)
-          getUsers();
-        });
       })
     </script>
+
+    {% include "javascripts" %}
+
   </body>
 
   </html>
