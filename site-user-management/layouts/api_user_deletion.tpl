@@ -1,12 +1,11 @@
 {% if editmode %}
   <!DOCTYPE html>
-  {% include "template-variables" %}
-  <html class="{% if editmode %}editmode{% else %}public{% endif %}" lang="{{ page.language_code }}">
+  <html class="editmode" lang="{{ page.language_code }}">
     <head prefix="og: http://ogp.me/ns#">
-      {% include "html-head" %}
       <style>
-        .container .content {
+        .content {
           font-size: 16px;
+          font-family: sans-serif;
         }
 
         td,
@@ -21,68 +20,66 @@
           border-collapse: collapse;
         }
 
-        .user-list {
-          padding-top: 16px;
-        }
-
-        .search-user {
-          padding-top: 32px;
+        #home-button, 
+        .user-list, 
+        .search-user,
+        .add-user {
+          padding: 16px;
         }
       </style>
 
-      {% if editmode or site.has_many_languages? %}
-        {% assign lang-enabled = "lang-enabled" %}
-      {% endif %}
-
-      {% if flags_state %}
-        {% assign flags="flags-enabled" %}
-      {% else %}
-        {% assign flags="flags-disabled" %}
-      {% endif %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
       {% if editor_locale == 'et' %}
         {% assign str_add_email = "Soovid lisada e-posti aadressi? " %}
         {% assign str_add = "Lisa" %}
         {% assign str_search_email = "Soovid otsida kasutajat? " %}
         {% assign str_insert_email = "Sisesta e-posti aadress" %}
+        {% assign str_home = "Mine tagasi esilehele" %}
+        {% assign language = 'et' %}
+        {% assign str_title = "Parooliga kaitstud lehtede kasutajate kustutamine üle API" %}
       {% else %}
         {% assign str_add_email = "Add an e-mail address: " %}
         {% assign str_add = "Add" %}
         {% assign str_search_email = "Search for an e-mail: " %}
         {% assign str_insert_email = "Insert an e-mail" %}
+        {% assign str_home = "Go back to front page" %}
+        {% assign language = 'en' %}
+        {% assign str_title = "Deleting users of password-protected pages over API" %}
       {% endif %}
 
     </head>
 
-    <body class="content-page {{ lang-enabled }} {{ flags }}">
+    <title>{{str_title}}</title>
+
+    <body class="content">
+
+      <a href="/" id="home-button">{{ str_home | escape_once }}</a>
+
       <div class="container">
-        {% include "header" %}
-
-        <section class="content-header content-formatted cfx"></section>
-
-        <main class="content" role="main">
 
           <div class="add-user">
-            <label for="email">{{ str_add_email }}</label>
-            <input type="email" id="email-to-add" name="email" placeholder="email@email.com">
+            <label for="email">{{ str_add_email | escape_once }}</label>
+            <input 
+              type="email" 
+              id="email-to-add" 
+              name="email" 
+              placeholder="email@email.com" 
+              required
+            >
 
-            <input type="submit" value="{{ str_add }}" id="add-user"><br>
+            <input type="submit" value="{{ str_add | escape_once }}" id="add-user"><br>
           </div>
 
 
           <div class="search-user">
-            <label for="search">{{ str_search_email }}</label>
-            <input id="search" type="text" placeholder="{{ str_insert_email }}" />
+            <label for="search">{{ str_search_email | escape_once }}</label>
+            <input id="search" type="text" placeholder="{{ str_insert_email | escape_once }}" />
           </div>
 
           <div class="user-list"></div>
 
-        </main>
-        {% include "footer" %}
       </div>
-
-      {%- comment -%} Included component name can differ depending on template {%- endcomment -%}
-      {% include "javascripts" %}
 
       <script>
         const translationStrings = {
@@ -112,8 +109,7 @@
           }
         }
 
-        const language = document.getElementsByTagName('html')[0].getAttribute('lang');
-        const tr = key => (translationStrings[language] || {})[key];
+        const tr = key => (translationStrings['{{ language | escape_once }}'] || translationStrings['en'])[key];
 
         const translatedDeleteButton = tr('deleteButton');
 
@@ -148,6 +144,8 @@
                   alert(tr('userExists'));
                 }
               });
+          } else if (!emailAddressToAdd.match(regexp)) {
+            alert(tr('notValidEmail'))
           } else {
             alert(tr('somethingWentWrong'));
           }
@@ -227,5 +225,9 @@
 
   </html>
 {% else %}
-  <meta http-equiv="refresh" content="0; url=/" />
+  <!DOCTYPE html>
+  <head>
+    <title>Redirect</title>
+    <meta http-equiv="refresh" content="0; url=/" />
+  </head>
 {% endif %}
