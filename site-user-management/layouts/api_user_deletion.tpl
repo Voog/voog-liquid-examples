@@ -89,10 +89,9 @@
             deleteButton: 'Kustuta',
             confirmText: 'Oled sa kindel, et soovid seda kasutajat kustutada?',
             userDeleted: 'Kasutaja kustutatud!',
-            userExists: 'Kasutaja on juba olemas!',
             userAdded: 'Kasutaja lisatud!',
             userNotInserted: "E-posti aadressi ei ole sisestatud!",
-            notValidEmail: "Sisestatud e-posti aadress on ebasobiv!",
+            notCorrectOrAlreadyExists: "E-posti aadress pole korrektne või on juba lisatud!",
             somethingWentWrong: "Midagi läks valesti, proovi uuesti!"
           },
           'en': {
@@ -101,10 +100,9 @@
             deleteButton: 'Delete',
             confirmText: 'Are you sure you want to delete this account?',
             userDeleted: 'User deleted!',
-            userExists: 'User already exists!',
             userAdded: 'User added!',
             userNotInserted: "E-mail address is not inserted",
-            notValidEmail: "The entered e-mail address is not valid!",
+            notCorrectOrAlreadyExists: "The entered e-mail address is not valid or already exists!",
             somethingWentWrong: "Something went wrong, try again!"
           }
         }
@@ -123,7 +121,7 @@
 
         const addUser = () => {
           const emailAddressToAdd = $('#email-to-add')[0].value;
-          const regexp = /^([\w\d._\-#])+@([\w\d._\-#]+[.][\w\d._\-#]+)+$/;
+          const regexp = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
 
           if (emailAddressToAdd === '') {
             alert(tr('userNotInserted'));
@@ -141,13 +139,11 @@
               })
               .catch(function (xhr) {
                 if (typeof xhr.responseJSON.errors.email !== 'undefined') {
-                  alert(tr('userExists'));
+                  alert(tr('notCorrectOrAlreadyExists'));
                 }
               });
-          } else if (!emailAddressToAdd.match(regexp)) {
-            alert(tr('notValidEmail'))
           } else {
-            alert(tr('somethingWentWrong'));
+            alert(tr('notCorrectOrAlreadyExists'));
           }
         }
 
