@@ -7,43 +7,35 @@
           font-size: 16px;
           font-family: sans-serif;
         }
-
         a {
           color: #443df6;
         }
-
         h1 {
           margin: 0;
           padding: 16px 0 0 16px;
         }
-
         td,
         th {
           border: 1px solid #dddddd;
           padding: 8px;
           text-align: left;
         }
-
         table {
           table-layout: fixed;
           border-collapse: collapse;
         }
-
         .text-center {
           text-align: center;
         }
-
         #home-button, 
         .user-list, 
         .search-user,
         .add-user {
           padding: 16px;
         }
-
         .user-pagination {
           padding-left: 16px;
         }
-
         .user-pagination button:not(:first-child) {
           margin-left: 8px;
         }
@@ -59,6 +51,9 @@
         {% assign str_home = " ← Mine tagasi esilehele" %}
         {% assign language = 'et' %}
         {% assign str_title = "Parooliga kaitstud lehtede kasutajate haldamine" %}
+        {% assign str_email_address = "E-posti aadress" %}
+        {% assign str_delete_button = "Kustuta" %}
+        {% assign str_user_activated = "Aktiveeritud" %}
       {% else %}
         {% assign str_add_email = "Add an e-mail address: " %}
         {% assign str_add = "Add" %}
@@ -67,6 +62,9 @@
         {% assign str_home = " ← Go back to front page" %}
         {% assign language = 'en' %}
         {% assign str_title = "Manage users of password-protected pages" %}
+        {% assign str_email_address = "E-mail address" %}
+        {% assign str_delete_button = "Delete" %}
+        {% assign str_user_activated = "Activated" %}
       {% endif %}
 
       <title>{{str_title}}</title>
@@ -93,7 +91,6 @@
 
             <input type="submit" value="{{ str_add | escape_once }}" id="add-user"><br>
           </div>
-
           
 
           <div class="search-user">
@@ -101,43 +98,43 @@
             <input id="search" type="text" placeholder="{{ str_insert_email | escape_once }}" />
           </div>
 
-          <div class="user-pagination"></div>
-          <div class="user-list"></div>
+          <div class="user-list">
+            <table id='user-table-table'>
+              <thead>
+                <tr>
+                  <th>{{str_email_address | escape_once}}</th>
+                  <th>{{str_delete_button | escape_once}}</th>
+                  <th>{{str_user_activated | escape_once}}</th>
+                </tr>
+              </thead>
+                <tbody id='user-table'>
+          </div>
 
       </div>
 
       <script>
         const translationStrings = {
           'et': {
-            emailAddress: 'E-posti aadress',
             deleteUser: 'Kustuta kasutaja',
-            deleteButton: 'Kustuta',
             confirmText: 'Oled sa kindel, et soovid seda kasutajat kustutada?',
             userDeleted: 'Kasutaja kustutatud!',
             userAdded: 'Kasutaja lisatud!',
             userNotInserted: "E-posti aadressi ei ole sisestatud!",
             notCorrectOrAlreadyExists: "E-posti aadress pole korrektne või on juba lisatud!",
             somethingWentWrong: "Midagi läks valesti, proovi uuesti!",
-            userActivated: "Aktiveeritud",
-            str_page: "Leht"
           },
           'en': {
-            emailAddress: 'E-mail address',
             deleteUser: 'Delete user',
-            deleteButton: 'Delete',
             confirmText: 'Are you sure you want to delete this account?',
             userDeleted: 'User deleted!',
             userAdded: 'User added!',
             userNotInserted: "E-mail address is not inserted",
             notCorrectOrAlreadyExists: "The entered e-mail address is not valid or already exists!",
             somethingWentWrong: "Something went wrong, try again!",
-            userActivated: "Activated",
-            str_page: "Page"
           }
         }
 
         const tr = key => (translationStrings['{{ language | escape_once }}'] || translationStrings['en'])[key];
-
         const translatedDeleteButton = tr('deleteButton');
 
         const searchTable = (e) => {
@@ -151,7 +148,6 @@
         const addUser = () => {
           const emailAddressToAdd = $('#email-to-add')[0].value;
           const regexp = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i;
-
           if (emailAddressToAdd === '') {
             alert(tr('userNotInserted'));
           } else if (emailAddressToAdd.match(regexp)) {
@@ -164,7 +160,7 @@
               })
               .then(function () {
                 alert(tr('userAdded'))
-                getUsers(1).then((obj) => { buildTable(obj.users);});
+                getUsers();
               })
               .catch(function (xhr) {
                 if (typeof xhr.responseJSON.errors.email !== 'undefined') {
@@ -176,7 +172,7 @@
           }
         }
 
-        const getUsers = (pageNumber) => new Promise((resolve, reject) => {
+        const getUsers = (pageNumber = 1) => new Promise((resolve, reject) => {
           $.ajax({
               type: 'GET',
               contentType: 'application/json',
@@ -184,10 +180,20 @@
               dataType: 'json',
             })
             .then((users, status, xhr) => {
-              const nPages = parseInt(xhr.getResponseHeader('X-Total-Pages'));
-              const obj = {users: users, pages: nPages}
-              buildTable(users);
-              resolve(obj);
+              const pages = parseInt(xhr.getResponseHeader('X-Total-Pages'));
+
+              if (pageNumber === 1 && pageNumber != pages) {
+                $('#user-table').empty();
+                addToTable(users);
+                pageNumber += 1;
+                getUsers(pageNumber);
+              } else if (pageNumber > pages) {
+                $('#user-table-table').append('</tbody></table>');
+              } else {
+                pageNumber += 1;
+                addToTable(users);
+                getUsers(pageNumber);
+              }
             })
             .catch(xhr => {
               alert(tr('somethingWentWrong'));
@@ -195,19 +201,9 @@
             });
         });
 
-        const buildTable = users => {
-          let list_html = `<table id='user-table-table'>
-                      <thead>
-                        <tr>
-                          <th>${tr('emailAddress')}</th>
-                          <th>${tr('deleteUser')}</th>
-                          <th>${tr('userActivated')}</th>
-                        </tr>
-                      </thead>
-                        <tbody id='user-table'>`;
-
+        const addToTable = users => {
           users.forEach((user) => {
-            list_html += `<tr>
+            let addTableRow = `<tr>
                             <td>${user.email}</td>
                             <td class='text-center'>
                               <button class='delete' data-id='${user.id}'>
@@ -218,17 +214,14 @@
                               ${user.status === 'active' ? '\u2713' : '\u2717'}
                             </td>
                           </tr>`;
-          });
-
-          list_html += '</tbody></table>';
-          $('.user-list').html(list_html);
-        };
+            $('#user-table').append(addTableRow);
+          })
+        }
 
         const deleteUser = (e) => {
           const target = e.target || e.srcElement;
           const entry = target.closest('tr');
           const id = $(target)[0].attributes['data-id'].value;
-
           if (confirm(tr('confirmText'))) {
             $.ajax({
               type: 'DELETE',
@@ -245,21 +238,11 @@
         }
         
         const init = () => $(document).ready(() => {
-
-          getUsers(1).then((obj) => {
-            const num = obj.pages;
-            let container = $('<div />')
-            for (let i = 1; i <= num; i++) {
-              container.append(`<button class='pagination-button' onclick="getUsers(${i})">${tr('str_page')} ${i}</button>`);
-            }
-            $('.user-pagination').html(container);
-          });
-          
+          getUsers();
           $('#search').on('keyup', searchTable);
           $(document).on('click', '.delete', deleteUser);
           $(document).on('click', '#add-user', addUser);
         });
-
         init();
       </script>
     </body>
