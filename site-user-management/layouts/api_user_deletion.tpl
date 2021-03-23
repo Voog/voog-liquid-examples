@@ -42,7 +42,6 @@
         {% assign str_add = "Lisa" %}
         {% assign str_search_email = "Otsi kasutajat sel lehel: " %}
         {% assign str_home = " ← Mine tagasi esilehele" %}
-        {% assign language = 'et' %}
         {% assign str_title = "Parooliga kaitstud lehtede kasutajate haldamine" %}
         {% assign str_email_address = "E-posti aadress" %}
         {% assign str_delete_button = "Kustuta" %}
@@ -52,7 +51,6 @@
         {% assign str_add = "Add" %}
         {% assign str_search_email = "Search for an e-mail on this page: " %}
         {% assign str_home = " ← Go back to front page" %}
-        {% assign language = 'en' %}
         {% assign str_title = "Manage users of password-protected pages" %}
         {% assign str_email_address = "E-mail address" %}
         {% assign str_delete_button = "Delete" %}
@@ -130,7 +128,7 @@
           }
         }
 
-        const tr = key => (translationStrings['{{ language | escape_once }}'] || translationStrings['en'])[key];
+        const tr = key => (translationStrings['{{ editor_locale }}'] || translationStrings['en'])[key];
         const translatedDeleteButton = tr('deleteButton');
 
         const searchTable = (e) => {
