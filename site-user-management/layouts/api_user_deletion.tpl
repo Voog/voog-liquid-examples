@@ -177,7 +177,7 @@
             const nPages = obj.nPages;
 
             for (let i = 1; i <= nPages; i++) {
-              promises.push(getUsersPage(i))
+              promises.push(getUsersPage(i));
             }
 
             Promise.all(promises).then((results) => {
