@@ -91,7 +91,7 @@
           </div>
 
           <div class="user-list">
-            <table id='user-table-table'>
+            <table id='user-table'>
               <thead>
                 <tr>
                   <th>{{str_email_address | escape_once}}</th>
@@ -99,7 +99,7 @@
                   <th>{{str_user_activated | escape_once}}</th>
                 </tr>
               </thead>
-              <tbody id='user-table'>
+              <tbody id='user-table-body'>
               </tbody>
             </table>
           </div>
@@ -137,7 +137,7 @@
           const target = e.target || e.srcElement;
           const value = target.value.toLowerCase();
 
-          $('#user-table tr').each(function () {
+          $('#user-table-body tr').each(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
           });
         }
@@ -173,15 +173,17 @@
         const getAllUsers = () => {
           let promises = [];
 
-          getUsersPage().then((obj) => {
-            const nPages = obj.nPages;
+          getUsersPage().then((usersPage) => {
+            const nPages = usersPage.nPages;
 
-            for (let i = 1; i <= nPages; i++) {
+            for (let i = 2; i <= nPages; i++) {
               promises.push(getUsersPage(i));
             }
+            
+            addToTable(usersPage.users, {init: true});
 
             Promise.all(promises).then((results) => {
-              results.forEach((obj, idx) => addToTable(obj.users, {init: idx === 1}));
+              results.forEach((usersPage, idx) => addToTable(usersPage.users));
             });
           })
         }
@@ -194,9 +196,9 @@
               dataType: 'json',
             })
             .then((users, status, xhr) => {
-              const pages = parseInt(xhr.getResponseHeader('X-Total-Pages'));
+              const nPages = parseInt(xhr.getResponseHeader('X-Total-Pages'));
 
-              resolve({users: users, nPages: pages});          
+              resolve({users, nPages});          
             })
             .catch(xhr => {
               alert(tr('somethingWentWrong'));
@@ -204,14 +206,14 @@
             });
         });
 
-        const addToTable = (users, init = false) => {
+        const addToTable = (users, {init = false} = {}) => {
 
           if (init) {
-            $('#user-table').empty();
+            $('#user-table-body').empty();
           }
 
           users.forEach((user) => {
-            $('#user-table').append(`<tr>
+            $('#user-table-body').append(`<tr>
                             <td>${user.email}</td>
                             <td class='text-center'>
                               <button class='delete' data-id='${user.id}'>
