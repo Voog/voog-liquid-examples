@@ -23,6 +23,7 @@
         "invoice_filename": "счет_%{code}.pdf",
         "order": "Заказ%{code}",
         "order_details": {
+          "additional_details": "Дополнительная информация",
           "address": "Адрес",
           "billing_address": "Адрес получателя счета",
           "company_name": "Наименование компании",
@@ -32,6 +33,7 @@
           "discount": "Скидка",
           "discount_cart": "Скидка на все объекты",
           "discount_cart_and_shipping": "Скидка на все объекты и доставку",
+          "discount_code": "Код скидки",
           "discount_shipping": "Скидка на доставку",
           "full_address": "Адрес",
           "information": "Информация",
@@ -48,6 +50,7 @@
           "order_details": "Подробная информация о заказе",
           "payment_instructions": "Инструкции по оплате",
           "phone": "Телефон",
+          "pod_name": "Местоположение",
           "recipient": "Получатель",
           "shipping": "Отправка",
           "shipping_address": "Адрес доставки",

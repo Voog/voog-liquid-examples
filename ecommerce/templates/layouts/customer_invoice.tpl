@@ -291,72 +291,108 @@
       <div class="main">
 
         {% if order.tax_amounts.size > 1 %}
-          {% comment %}Multi tax invoice{% endcomment %}
+        {% comment %}Multi tax invoice{% endcomment %}
 
-          <table class="items items-multi">
-            <thead>
+        <table class="items items-multi">
+          <thead>
+            <tr>
+              <th>{{ 'ecommerce.invoice.item' | lc | escape_once }}</th>
+              <th>{{ 'ecommerce.invoice.quantity' | lc | escape_once }}</th>
+              <th>{{ 'ecommerce.invoice.vat' | lc | escape_once }}</th>
+              <th>{{ 'ecommerce.invoice.price' | lc | escape_once }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.items %}
+              {% if item.has_item_discount %}
+                {% assign order_data_rows = order_data_rows | plus: 2 %}
+              {% else %}
+                {% assign order_data_rows = order_data_rows | plus: 1 %}
+              {% endif %}
+
+              {% assign item_products_original_price = item.original_price | times: item.quantity %}
+
               <tr>
-                <th>{{ 'ecommerce.invoice.item' | lc | escape_once }}</th>
-                <th>{{ 'ecommerce.invoice.quantity' | lc | escape_once }}</th>
-                <th>{{ 'ecommerce.invoice.vat' | lc | escape_once }}</th>
-                <th>{{ 'ecommerce.invoice.price' | lc | escape_once }}</th>
+                <td>
+                  {{ item.product_name | escape_once }}{% if item.product_is_variant %} ({{ item.product_variant_description | escape_once }}){% endif %}{% unless item.note == blank %} ({{ item.note | escape_once }}){% endunless %}
+                </td>
+                <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
+                <td>{% assign tax_rate_int = item.tax_rate | floor %}{% if tax_rate_int == item.tax_rate %}{{ tax_rate_int }}{% else %}{{ item.tax_rate }}{% endif %}%</td>
+                <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
               </tr>
-            </thead>
-            <tbody>
-              {% for item in order.items %}
-                {% if item.has_item_discount %}
-                  {% assign order_data_rows = order_data_rows | plus: 2 %}
-                {% else %}
-                  {% assign order_data_rows = order_data_rows | plus: 1 %}
-                {% endif %}
 
-                {% assign item_products_original_price = item.original_price | times: item.quantity %}
-
-                <tr>
-                  <td>
-                    {{ item.product_name | escape_once }}{% if item.product_is_variant %} ({{ item.product_variant_description | escape_once }}){% endif %}{% unless item.note == blank %} ({{ item.note | escape_once }}){% endunless %}
-                  </td>
-                  <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
-                  <td>{% assign tax_rate_int = item.tax_rate | floor %}{% if tax_rate_int == item.tax_rate %}{{ tax_rate_int }}{% else %}{{ item.tax_rate }}{% endif %}%</td>
-                  <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
-                </tr>
-
-                {% if item.has_item_discount %}
-                  {% assign
-                    item_discount = item.subtotal_amount | minus: item_products_original_price
-                  %}
-                  {% assign
-                    items_displayed_discount = items_displayed_discount | plus: item_discount
-                  %}
-
-                  <tr>
-                    <td>
-                      {{ 'ecommerce.invoice.discount' | lc | escape_once }}
-
-                      {% if order.discount.discount_type == "fixed" %}
-                        -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                      {% endif %}
-                    </td>
-
-                    {% if order.discount.discount_type == "percentage" %}
-                      <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
-                    {% else %}
-                      <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
-                    {% endif %}
-                    <td></td>
-                    <td>{{ item_discount | money_with_currency: order.currency }}</td>
-                  </tr>
-                {% endif %}
-              {% endfor %}
-
-              {% if order.discount and order.discount.applies_to == "cart" %}
+              {% if item.has_item_discount %}
                 {% assign
-                  items_displayed_discount = items_displayed_discount | plus: order_total_discount
+                  item_discount = item.subtotal_amount | minus: item_products_original_price
+                %}
+                {% assign
+                  items_displayed_discount = items_displayed_discount | plus: item_discount
                 %}
 
                 <tr>
                   <td>
-                    {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
+                    {{ 'ecommerce.invoice.discount' | lc | escape_once }}
+
+                    {% if order.discount.discount_type == "fixed" %}
+                      -{{ order.discount.amount | money_with_currency: order.discount.currency }}
+                    {% endif %}
+                  </td>
+
+                  {% if order.discount.discount_type == "percentage" %}
+                    <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
+                  {% else %}
+                    <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
+                  {% endif %}
+                  <td></td>
+                  <td>{{ item_discount | money_with_currency: order.currency }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+
+            {% if order.discount and order.discount.applies_to == "cart" %}
+              {% assign
+                items_displayed_discount = items_displayed_discount | plus: order_total_discount
+              %}
+
+              <tr>
+                <td>
+                  {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
+
+                  {% if order.discount.discount_type == "fixed" %}
+                    -{{ order.discount.amount | money_with_currency: order.discount.currency }}
+                  {% endif %}
+                </td>
+
+                {% if order.discount.discount_type == "percentage" %}
+                  <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
+                {% else %}
+                  <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
+                {% endif %}
+
+                <td></td>
+                <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
+              </tr>
+            {% endif %}
+
+            {% unless order.shipping_method == blank %}
+              <tr>
+                <td>{{ 'ecommerce.invoice.shipping' | lc | escape_once }}: {{ order.shipping_method.name | escape_once }}{% if order.shipping_method.option != blank %} — {{ order.shipping_method.option | escape_once }}{% endif %}</td>
+                <td></td>
+                <td>{% assign tax_rate_int = order.shipping_tax_rate | floor %}{% if tax_rate_int == order.shipping_tax_rate %}{{ tax_rate_int }}{% else %}{{ order.shipping_tax_rate }}{% endif %}%</td>
+                <td>{{ order.shipping_original_amount | money_with_currency: order.currency }}</td>
+              </tr>
+
+              {% if order.cart_rules_applied != true
+                and order.discount
+                and discount_applies_to_cart_and_or_shipping
+              %}
+                <tr>
+                  <td>
+                    {% if order.discount.applies_to == "shipping" %}
+                      {{ 'ecommerce.invoice.discount_shipping' | lc | escape_once }}
+                    {% else %}
+                      {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc | escape_once }}
+                    {% endif %}
 
                     {% if order.discount.discount_type == "fixed" %}
                       -{{ order.discount.amount | money_with_currency: order.discount.currency }}
@@ -370,79 +406,238 @@
                   {% endif %}
 
                   <td></td>
-                  <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
+
+                  {% if order.discount.applies_to == "shipping" %}
+                    <td>{{ order.shipping_subtotal_amount | minus: order.shipping_original_amount | money_with_currency: order.currency }}</td>
+                  {% else %}
+                    <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
+                  {% endif %}
                 </tr>
               {% endif %}
+            {% endunless %}
 
-              {% unless order.shipping_method == blank %}
-                <tr>
-                  <td>{{ 'ecommerce.invoice.shipping' | lc | escape_once }}: {{ order.shipping_method.name | escape_once }}{% if order.shipping_method.option != blank %} — {{ order.shipping_method.option | escape_once }}{% endif %}</td>
-                  <td></td>
-                  <td>{% assign tax_rate_int = order.shipping_tax_rate | floor %}{% if tax_rate_int == order.shipping_tax_rate %}{{ tax_rate_int }}{% else %}{{ order.shipping_tax_rate }}{% endif %}%</td>
-                  <td>{{ order.shipping_original_amount | money_with_currency: order.currency }}</td>
-                </tr>
+            {% if order.cart_rules_applied and order.effective_discount? %}
+              <tr>
+                <td>{{ 'ecommerce.invoice.discount' | lc | escape_once }}</td>
+                <td></td>
+                <td></td>
+                <td>-{{
+                  order.effective_discount_amount
+                  | plus: items_displayed_discount
+                  | money_with_currency: order.currency
+                }}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
 
-                {% if order.cart_rules_applied != true
-                  and order.discount
-                  and discount_applies_to_cart_and_or_shipping
-                %}
-                  <tr>
-                    <td>
-                      {% if order.discount.applies_to == "shipping" %}
-                        {{ 'ecommerce.invoice.discount_shipping' | lc | escape_once }}
-                      {% else %}
-                        {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc | escape_once }}
-                      {% endif %}
+        <table class="items items-multi items-total">
+          <tbody>
+            {% if order.paid? %}
+            <tr>
+              <td colspan="4" class="invoice-paid-up">
+                {{ 'ecommerce.invoice.invoice_paid_up' | lc | escape_once }}
+              </td>
+            </tr>
+            {% endif %}
 
-                      {% if order.discount.discount_type == "fixed" %}
-                        -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                      {% endif %}
-                    </td>
+            <tr>
+              <td colspan="2"></td>
+              <td>{{ 'ecommerce.invoice.total' | lc | escape_once }}</td>
+              <td>
+                {{
+                  order.items_original_amount |
+                  plus: order.shipping_original_amount |
+                  money_with_currency: order.currency
+                }}
+              </td>
+            </tr>
 
-                    {% if order.discount.discount_type == "percentage" %}
-                      <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
-                    {% else %}
-                      <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
-                    {% endif %}
+            {% if order.effective_discount? %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
+                <td>
+                  -{{ order.effective_discount_amount | money_with_currency: order.currency }}
+                </td>
+              </tr>
+            {% endif %}
 
-                    <td></td>
+            {% for rate_amounts in order.tax_amounts %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  {{ 'ecommerce.invoice.vat' | lc | escape_once }}
+                  {% assign tax_rate_int = rate_amounts.tax_rate | floor %}
+                  {% if tax_rate_int == rate_amounts.tax_rate %}
+                    {{ tax_rate_int }}%
+                  {% else %}
+                    {{ rate_amounts.tax_rate }}%
+                  {% endif %}
+                </td>
+                <td>
+                  {{ rate_amounts.tax_amount | money_with_currency: order.currency }}
+                </td>
+              </tr>
+            {% endfor %}
 
-                    {% if order.discount.applies_to == "shipping" %}
-                      <td>{{ order.shipping_subtotal_amount | minus: order.shipping_original_amount | money_with_currency: order.currency }}</td>
-                    {% else %}
-                      <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
-                    {% endif %}
-                  </tr>
-                {% endif %}
-              {% endunless %}
+            <tr class="price-summary">
+              <td></td>
+              <td></td>
+              <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
+              <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
+            </tr>
+          </tbody>
+        </table>
 
-              {% if order.cart_rules_applied and order.effective_discount? %}
-                <tr>
-                  <td>{{ 'ecommerce.invoice.discount' | lc | escape_once }}</td>
-                  <td></td>
-                  <td></td>
-                  <td>-{{
-                    order.effective_discount_amount
-                    | plus: items_displayed_discount
-                    | money_with_currency: order.currency
-                  }}</td>
-                </tr>
+        {% else %}
+        {% comment %}Single tax invoice{% endcomment %}
+
+        <table class="items">
+          <thead>
+            <tr>
+              <th>{{ 'ecommerce.invoice.item' | lc | escape_once }}</th>
+              <th>{{ 'ecommerce.invoice.quantity' | lc | escape_once }}</th>
+              <th>{{ 'ecommerce.invoice.price' | lc | escape_once }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.items %}
+              {% if item.has_item_discount %}
+                {% assign order_data_rows = order_data_rows | plus: 2 %}
+              {% else %}
+                {% assign order_data_rows = order_data_rows | plus: 1 %}
               {% endif %}
-            </tbody>
-          </table>
 
-          <table class="items items-multi items-total">
-            <tbody>
-              {% if order.paid? %}
-                <tr>
-                  <td colspan="4" class="invoice-paid-up">
-                    {{ 'ecommerce.invoice.invoice_paid_up' | lc | escape_once }}
-                  </td>
-                </tr>
-              {% endif %}
+              {% assign item_products_original_price = item.original_price | times: item.quantity %}
 
               <tr>
-                <td colspan="2"></td>
+                <td>
+                  {{ item.product_name | escape_once }}{% unless item.note == blank %} ({{ item.note | escape_once }}){% endunless %}{% if item.product_is_variant %} ({{ item.product_variant_description | escape_once }}){% endif %}
+                </td>
+                <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
+                <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
+              </tr>
+
+              {% if item.has_item_discount %}
+                {% assign
+                  item_discount = item.subtotal_amount | minus: item_products_original_price
+                %}
+                {% assign
+                  items_displayed_discount = items_displayed_discount | plus: item_discount
+                %}
+
+                <tr>
+                  <td>
+                    {{ 'ecommerce.invoice.discount' | lc | escape_once }}
+
+                    {% if order.discount.discount_type == "fixed" %}
+                      -{{ order.discount.amount | money_with_currency: order.discount.currency }}
+                    {% endif %}
+                  </td>
+
+                  {% if order.discount.discount_type == "percentage" %}
+                    <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
+                  {% else %}
+                    <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
+                  {% endif %}
+                  <td>{{ item_discount | money_with_currency: order.currency }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+
+            {% if order.discount and order.discount.applies_to == "cart" %}
+              {% assign
+                items_displayed_discount = items_displayed_discount | plus: order_total_discount
+              %}
+
+              <tr>
+                <td>
+                  {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
+
+                  {% if order.discount.discount_type == "fixed" %}
+                    -{{ order.discount.amount | money_with_currency: order.discount.currency }}
+                  {% endif %}
+                </td>
+
+                {% if order.discount.discount_type == "percentage" %}
+                  <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
+                {% else %}
+                  <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
+                {% endif %}
+
+                <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
+              </tr>
+            {% endif %}
+
+            {% unless order.shipping_method == blank %}
+              <tr>
+                <td>{{ 'ecommerce.invoice.shipping' | lc | escape_once }}: {{ order.shipping_method.name | escape_once }}{% if order.shipping_method.option != blank %} — {{ order.shipping_method.option | escape_once }}{% endif %}</td>
+                <td></td>
+                <td>{{ order.shipping_original_amount | money_with_currency: order.currency }}</td>
+              </tr>
+
+              {% if order.cart_rules_applied != true
+                and order.discount
+                and discount_applies_to_cart_and_or_shipping
+              %}
+                <tr>
+                  <td>
+                    {% if order.discount.applies_to == "shipping" %}
+                      {{ 'ecommerce.invoice.discount_shipping' | lc | escape_once }}
+                    {% else %}
+                      {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc | escape_once }}
+                    {% endif %}
+
+                    {% if order.discount.discount_type == "fixed" %}
+                      -{{ order.discount.amount | money_with_currency: order.discount.currency }}
+                    {% endif %}
+                  </td>
+
+                  {% if order.discount.discount_type == "percentage" %}
+                    <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
+                  {% else %}
+                    <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
+                  {% endif %}
+
+                  {% if order.discount.applies_to == "shipping" %}
+                    <td>{{ order.shipping_subtotal_amount | minus: order.shipping_original_amount | money_with_currency: order.currency }}</td>
+                  {% else %}
+                    <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
+                  {% endif %}
+                </tr>
+              {% endif %}
+            {% endunless %}
+
+            {% if order.cart_rules_applied and order.effective_discount? %}
+              <tr>
+                <td>{{ 'ecommerce.invoice.discount' | lc | escape_once }}</td>
+                <td></td>
+                <td>-{{
+                  order.effective_discount_amount
+                  | plus: items_displayed_discount
+                  | money_with_currency: order.currency
+                }}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+
+        <table class="items items-total">
+          <tbody>
+            {% if order.paid? %}
+            <tr>
+              <td class="invoice-paid-up" colspan="3">
+                {{ 'ecommerce.invoice.invoice_paid_up' | lc | escape_once }}
+              </td>
+            </tr>
+            {% endif %}
+
+            {% if order.tax_amounts.first.tax_rate > 0 %}
+              <tr>
+                <td></td>
                 <td>{{ 'ecommerce.invoice.total' | lc | escape_once }}</td>
                 <td>
                   {{
@@ -456,7 +651,6 @@
               {% if order.effective_discount? %}
                 <tr>
                   <td></td>
-                  <td></td>
                   <td>{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
                   <td>
                     -{{ order.effective_discount_amount | money_with_currency: order.currency }}
@@ -466,7 +660,6 @@
 
               {% for rate_amounts in order.tax_amounts %}
                 <tr>
-                  <td></td>
                   <td></td>
                   <td>
                     {{ 'ecommerce.invoice.vat' | lc | escape_once }}
@@ -482,217 +675,24 @@
                   </td>
                 </tr>
               {% endfor %}
+            {% endif %}
 
-              <tr class="price-summary">
-                <td></td>
-                <td></td>
-                <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
-                <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
-              </tr>
-            </tbody>
-          </table>
-
-          {% else %}
-          {% comment %}Single tax invoice{% endcomment %}
-
-          <table class="items">
-            <thead>
-              <tr>
-                <th>{{ 'ecommerce.invoice.item' | lc | escape_once }}</th>
-                <th>{{ 'ecommerce.invoice.quantity' | lc | escape_once }}</th>
-                <th>{{ 'ecommerce.invoice.price' | lc | escape_once }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in order.items %}
-                {% if item.has_item_discount %}
-                  {% assign order_data_rows = order_data_rows | plus: 2 %}
-                {% else %}
-                  {% assign order_data_rows = order_data_rows | plus: 1 %}
-                {% endif %}
-
-                {% assign item_products_original_price = item.original_price | times: item.quantity %}
-
-                <tr>
-                  <td>
-                    {{ item.product_name | escape_once }}{% unless item.note == blank %} ({{ item.note | escape_once }}){% endunless %}{% if item.product_is_variant %} ({{ item.product_variant_description | escape_once }}){% endif %}
-                  </td>
-                  <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
-                  <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
-                </tr>
-
-                {% if item.has_item_discount %}
-                  {% assign
-                    item_discount = item.subtotal_amount | minus: item_products_original_price
-                  %}
-                  {% assign
-                    items_displayed_discount = items_displayed_discount | plus: item_discount
-                  %}
-
-                  <tr>
-                    <td>
-                      {{ 'ecommerce.invoice.discount' | lc | escape_once }}
-
-                      {% if order.discount.discount_type == "fixed" %}
-                        -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                      {% endif %}
-                    </td>
-
-                    {% if order.discount.discount_type == "percentage" %}
-                      <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
-                    {% else %}
-                      <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
-                    {% endif %}
-                    <td>{{ item_discount | money_with_currency: order.currency }}</td>
-                  </tr>
-                {% endif %}
-              {% endfor %}
-
-              {% if order.discount and order.discount.applies_to == "cart" %}
-                {% assign
-                  items_displayed_discount = items_displayed_discount | plus: order_total_discount
-                %}
-
-                <tr>
-                  <td>
-                    {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
-
-                    {% if order.discount.discount_type == "fixed" %}
-                      -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                    {% endif %}
-                  </td>
-
-                  {% if order.discount.discount_type == "percentage" %}
-                    <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
-                  {% else %}
-                    <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
-                  {% endif %}
-
-                  <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
-                </tr>
-              {% endif %}
-
-              {% unless order.shipping_method == blank %}
-                <tr>
-                  <td>{{ 'ecommerce.invoice.shipping' | lc | escape_once }}: {{ order.shipping_method.name | escape_once }}{% if order.shipping_method.option != blank %} — {{ order.shipping_method.option | escape_once }}{% endif %}</td>
-                  <td></td>
-                  <td>{{ order.shipping_original_amount | money_with_currency: order.currency }}</td>
-                </tr>
-
-                {% if order.cart_rules_applied != true
-                  and order.discount
-                  and discount_applies_to_cart_and_or_shipping
-                %}
-                  <tr>
-                    <td>
-                      {% if order.discount.applies_to == "shipping" %}
-                        {{ 'ecommerce.invoice.discount_shipping' | lc | escape_once }}
-                      {% else %}
-                        {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc | escape_once }}
-                      {% endif %}
-
-                      {% if order.discount.discount_type == "fixed" %}
-                        -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                      {% endif %}
-                    </td>
-
-                    {% if order.discount.discount_type == "percentage" %}
-                      <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
-                    {% else %}
-                      <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
-                    {% endif %}
-
-                    {% if order.discount.applies_to == "shipping" %}
-                      <td>{{ order.shipping_subtotal_amount | minus: order.shipping_original_amount | money_with_currency: order.currency }}</td>
-                    {% else %}
-                      <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
-                    {% endif %}
-                  </tr>
-                {% endif %}
-              {% endunless %}
-
-              {% if order.cart_rules_applied and order.effective_discount? %}
-                <tr>
-                  <td>{{ 'ecommerce.invoice.discount' | lc | escape_once }}</td>
-                  <td></td>
-                  <td>-{{
-                    order.effective_discount_amount
-                    | plus: items_displayed_discount
-                    | money_with_currency: order.currency
-                  }}</td>
-                </tr>
-              {% endif %}
-            </tbody>
-          </table>
-
-          <table class="items items-total">
-            <tbody>
-              {% if order.paid? %}
-                <tr>
-                  <td class="invoice-paid-up" colspan="3">
-                    {{ 'ecommerce.invoice.invoice_paid_up' | lc | escape_once }}
-                  </td>
-                </tr>
-              {% endif %}
-
-              {% if order.tax_amounts.first.tax_rate > 0 %}
-                <tr>
-                  <td></td>
-                  <td>{{ 'ecommerce.invoice.total' | lc | escape_once }}</td>
-                  <td>
-                    {{
-                      order.items_original_amount |
-                      plus: order.shipping_original_amount |
-                      money_with_currency: order.currency
-                    }}
-                  </td>
-                </tr>
-
-                {% if order.effective_discount? %}
-                  <tr>
-                    <td></td>
-                    <td>{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
-                    <td>
-                      -{{ order.effective_discount_amount | money_with_currency: order.currency }}
-                    </td>
-                  </tr>
-                {% endif %}
-
-                {% for rate_amounts in order.tax_amounts %}
-                  <tr>
-                    <td></td>
-                    <td>
-                      {{ 'ecommerce.invoice.vat' | lc | escape_once }}
-                      {% assign tax_rate_int = rate_amounts.tax_rate | floor %}
-                      {% if tax_rate_int == rate_amounts.tax_rate %}
-                        {{ tax_rate_int }}%
-                      {% else %}
-                        {{ rate_amounts.tax_rate }}%
-                      {% endif %}
-                    </td>
-                    <td>
-                      {{ rate_amounts.tax_amount | money_with_currency: order.currency }}
-                    </td>
-                  </tr>
-                {% endfor %}
-              {% endif %}
-
-              <tr class="price-summary">
-                <td></td>
-                <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
-                <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
-              </tr>
-            </tbody>
-          </table>
+            <tr class="price-summary">
+              <td></td>
+              <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
+              <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
+            </tr>
+          </tbody>
+        </table>
         {% endif %}
 
         {% comment %} Order note {% endcomment %}
         {% unless order.note == blank %}
-          <table class="note">
-            <tbody>
-              <td>{{ 'ecommerce.invoice.note' | lc | escape_once }}: {{ order.note | escape_once }}</td>
-            </tbody>
-          </table>
+        <table class="note">
+          <tbody>
+            <td>{{ 'ecommerce.invoice.note' | lc | escape_once }}: {{ order.note | escape_once }}</td>
+          </tbody>
+        </table>
         {% endunless %}
       </div>
 
@@ -721,18 +721,18 @@
         </div>
         <div class="separator"></div>
         {% if store.invoice_branding %}
-          <div class="footer-banner">
-            <table class="footer-banner-table">
-              <tr>
-                <td>
-                  {{ 'ecommerce.invoice.footer_text' | lc | escape_once }}
-                </td>
-                <td class="footer-logo">
-                  <img src="http://static.voog.com/libs/edicy-tools/latest/voog-logo-brand-blue.svg" alt="" />
-                </td>
-              </tr>
-            </table>
-          </div>
+        <div class="footer-banner">
+          <table class="footer-banner-table">
+            <tr>
+              <td>
+                {{ 'ecommerce.invoice.footer_text' | lc | escape_once }}
+              </td>
+              <td class="footer-logo">
+                <img src="http://static.voog.com/libs/edicy-tools/latest/voog-logo-brand-blue.svg" alt="" />
+              </td>
+            </tr>
+          </table>
+        </div>
         {% endif %}
       </div>
     </div>

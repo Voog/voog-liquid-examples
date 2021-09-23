@@ -23,6 +23,7 @@
         "invoice_filename": "arve_%{code}.pdf",
         "order": "Tellimus %{code}",
         "order_details": {
+          "additional_details": "Lisateave",
           "address": "Aadress",
           "billing_address": "Arve aadress",
           "company_name": "Ettevõtte nimi",
@@ -32,6 +33,7 @@
           "discount": "Soodustus",
           "discount_cart": "Ostukorvi soodustus",
           "discount_cart_and_shipping": "Ostukorvi ja tarnimise soodustus",
+          "discount_code": "Sooduskood",
           "discount_shipping": "Tarnimise soodustus",
           "full_address": "Aadress",
           "information": "Info",
@@ -46,6 +48,7 @@
           "order_details": "Tellimuse detailid",
           "payment_instructions": "Maksmisinfo",
           "phone": "Telefon",
+          "pod_name": "Asukoht",
           "recipient": "Saaja nimi",
           "shipping": "Kohaletoimetamine",
           "shipping_address": "Tarne aadress",
