@@ -23,6 +23,7 @@
         "invoice_filename": "rekins_%{code}.pdf",
         "order": "Pasūtījums %{code}",
         "order_details": {
+          "additional_details": "Papildu informācija",
           "address": "Adrese",
           "billing_address": "Rēķina adrese",
           "company_name": "Uzņēmuma nosaukums",
@@ -32,6 +33,7 @@
           "discount": "Atlaide",
           "discount_cart": "Atlaide visiem produktiem",
           "discount_cart_and_shipping": "Atlaide visiem produktiem un piegādei",
+          "discount_code": "Atlaides kods",
           "discount_shipping": "Atlaide piegādei",
           "full_address": "Adrese",
           "information": "Informācija",
@@ -47,6 +49,7 @@
           "order_details": "Pasūtījuma informācija",
           "payment_instructions": "Maksājuma instrukcijas",
           "phone": "Tālrunis",
+          "pod_name": "Atrašanās vieta",
           "recipient": "Saņēmējs",
           "shipping": "Piegāde",
           "shipping_address": "Piegādes adrese",

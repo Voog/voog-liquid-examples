@@ -12,4 +12,5 @@
   {% endif -%}
 
   {%- assign custom_translations = custom_translations_json | json_parse -%}
+
 {%- endcomment -%}

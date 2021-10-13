@@ -23,6 +23,7 @@
         "invoice_filename": "factuur_%{code}.pdf",
         "order": "Bestelling %{code}",
         "order_details": {
+          "additional_details": "Aanvullende gegevens",
           "address": "Adres",
           "billing_address": "Factuuradres",
           "company_name": "Bedrijfsnaam",
@@ -32,6 +33,7 @@
           "discount": "Korting",
           "discount_cart": "Korting op alle artikelen",
           "discount_cart_and_shipping": "Korting op alle artikelen en op verzending",
+          "discount_code": "Kortingscode",
           "discount_shipping": "Korting op verzending",
           "full_address": "Adres",
           "information": "Informatie",
@@ -46,6 +48,7 @@
           "order_details": "Details bestelling",
           "payment_instructions": "Betaalinstructies",
           "phone": "Telefoon",
+          "pod_name": "Locatie",
           "recipient": "Ontvanger",
           "shipping": "Verzending",
           "shipping_address": "Verzendadres",

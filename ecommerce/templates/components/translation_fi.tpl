@@ -23,6 +23,7 @@
         "invoice_filename": "lasku_%{code}.pdf",
         "order": "Tilaus %{code}",
         "order_details": {
+          "additional_details": "Lisätiedot",
           "address": "Osoite",
           "billing_address": "Laskutusosoite",
           "company_name": "Yrityksen nimi",
@@ -32,6 +33,7 @@
           "discount": "Alennus",
           "discount_cart": "Alennus kaikille tuotteille",
           "discount_cart_and_shipping": "Alennus kaikille tuotteille ja toimitusmaksuille",
+          "discount_code": "Alennuskoodi",
           "discount_shipping": "Alennus toimitusmaksulle",
           "full_address": "Osoite",
           "information": "Tiedot",
@@ -46,6 +48,7 @@
           "order_details": "Tilauksen tiedot",
           "payment_instructions": "Maksuohjeet",
           "phone": "Puhelin",
+          "pod_name": "Paikka",
           "recipient": "Vastaanottaja",
           "shipping": "Toimituskulut",
           "shipping_address": "Toimitusosoite",

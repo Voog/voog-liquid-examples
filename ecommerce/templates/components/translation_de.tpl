@@ -23,6 +23,7 @@
         "invoice_filename": "rechnung_%{code}.pdf",
         "order": "Bestellung %{code}",
         "order_details": {
+          "additional_details": "Weitere Details",
           "address": "Adresse",
           "billing_address": "Rechnungsadresse",
           "company_name": "Name des Unternehmens ",
@@ -32,6 +33,7 @@
           "discount": "Rabatt",
           "discount_cart": "Rabatt auf alle Artikel",
           "discount_cart_and_shipping": "Rabatt auf alle Artikel und Versand",
+          "discount_code": "Rabattcode",
           "discount_shipping": "Rabatt auf Versand",
           "full_address": "Adresse",
           "information": "Information",
@@ -46,6 +48,7 @@
           "order_details": "Bestellung Details",
           "payment_instructions": "Zahlungsanweisungen",
           "phone": "Telefon",
+          "pod_name": "Position",
           "recipient": "Empfänger",
           "shipping": "Versand",
           "shipping_address": "Versandanschrift",
