@@ -3,17 +3,17 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Purchase info",
-        "intro": "Thank you for your purchase at our webstore, %{store_name}. You chose the offline payment option, so here's the invoice and payment instructions. We'll start shipping once the payment is received. Questions? Contact us anytime at %{store_email}.",
+        "intro": "Thank you for your purchase at our webstore, %{store_name}. You chose the offline payment option, so here are the invoice and payment instructions. We'll start delivering once the payment is received. Questions? Contact us anytime at %{store_email}.",
         "preview": "Thank you for your purchase.",
         "subject": "Invoice %{code} from %{store_name}"
       },
       "payment_notification": {
-        "body": "Thank you for your purchase at %{store_name}. We have successfully received your payment and you can find the paid up invoice in the attachment.\nYour order will be shipped as soon as possible. Questions? Get in contact via %{store_email}.",
+        "body": "Thank you for your purchase at %{store_name}. We have successfully received your payment and you can find the paid up invoice in the attachment.\nYour order will be delivered as soon as possible. Questions? Get in contact via %{store_email}.",
         "heading": "Purchase confirmation",
         "subject": "Invoice %{code} from %{store_name}"
       },
       "payment_status_notification": {
-        "body": "Your payment for order %{code} has been confirmed and it will be shipped as soon as possible.",
+        "body": "Your payment for order %{code} has been confirmed, and it will be delivered as soon as possible.",
         "heading": "Payment confirmed",
         "subject": "Payment confirmed for order %{code}"
       }
