@@ -216,10 +216,6 @@
       {% endunless %}
 
       {% if order.discount %}
-        {% if order.discount.applies_to == "shipping" or order.discount.applies_to == "cart_and_shipping" %}
-          {% assign discount_applies_to_cart_and_or_shipping = true %}
-        {% endif %}
-
         {% if order.discount.applies_to == "cart_and_shipping" %}
           {% assign order_total_original_amount = order.items_original_amount | plus: order.shipping_original_amount %}
           {% assign order_total_subtotal_amount = order.items_subtotal_amount | plus: order.shipping_subtotal_amount %}
@@ -232,7 +228,7 @@
           {% assign order_total_discount = 0 %}
         {% endif %}
 
-        {% if order.discount.applies_to == "cart" or order.discount.applies_to == "shipping" or order.discount.applies_to == "cart_and_shipping" %}
+        {% if order.discount.applies_to_cart? or order.discount.applies_to_shipping? %}
           {% assign order_data_rows = order_data_rows | plus: 1 %}
         {% endif %}
       {% endif %}
@@ -321,7 +317,15 @@
                 <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
               </tr>
 
-              {% if item.has_item_discount %}
+              {% if order.discount != blank and order.discount.applies_to_cart? %}
+                {% assign display_discount_row = false %}
+              {% elsif item.has_item_discount == false %}
+                {% assign display_discount_row = false %}
+              {% else %}
+                {% assign display_discount_row = true %}
+              {% endif %}
+
+              {% if display_discount_row %}
                 {% assign
                   item_discount = item.subtotal_amount | minus: item_products_original_price
                 %}
@@ -333,12 +337,12 @@
                   <td>
                     {{ 'ecommerce.invoice.discount' | lc | escape_once }}
 
-                    {% if order.discount.discount_type == "fixed" %}
+                    {% if order.discount.fixed? and item.discount != blank %}
                       -{{ order.discount.amount | money_with_currency: order.discount.currency }}
                     {% endif %}
                   </td>
 
-                  {% if order.discount.discount_type == "percentage" %}
+                  {% if order.discount.percentage? and item.discount != blank %}
                     <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                   {% else %}
                     <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
@@ -358,12 +362,12 @@
                 <td>
                   {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
 
-                  {% if order.discount.discount_type == "fixed" %}
+                  {% if order.discount.fixed? %}
                     -{{ order.discount.amount | money_with_currency: order.discount.currency }}
                   {% endif %}
                 </td>
 
-                {% if order.discount.discount_type == "percentage" %}
+                {% if order.discount.percentage? %}
                   <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                 {% else %}
                   <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
@@ -384,7 +388,7 @@
 
               {% if order.cart_rules_applied != true
                 and order.discount
-                and discount_applies_to_cart_and_or_shipping
+                and order.discount.applies_to_shipping?
               %}
                 <tr>
                   <td>
@@ -399,7 +403,7 @@
                     {% endif %}
                   </td>
 
-                  {% if order.discount.discount_type == "percentage" %}
+                  {% if order.discount.fixed? %}
                     <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                   {% else %}
                     <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
@@ -407,7 +411,7 @@
 
                   <td></td>
 
-                  {% if order.discount.applies_to == "shipping" %}
+                  {% if order.discount.percentage? %}
                     <td>{{ order.shipping_subtotal_amount | minus: order.shipping_original_amount | money_with_currency: order.currency }}</td>
                   {% else %}
                     <td>{{ order_total_discount | money_with_currency: order.currency }}</td>
@@ -521,7 +525,15 @@
                 <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
               </tr>
 
-              {% if item.has_item_discount %}
+              {% if order.discount != blank and order.discount.applies_to_cart? %}
+                {% assign display_discount_row = false %}
+              {% elsif item.has_item_discount == false %}
+                {% assign display_discount_row = false %}
+              {% else %}
+                {% assign display_discount_row = true %}
+              {% endif %}
+
+              {% if display_discount_row %}
                 {% assign
                   item_discount = item.subtotal_amount | minus: item_products_original_price
                 %}
@@ -533,12 +545,12 @@
                   <td>
                     {{ 'ecommerce.invoice.discount' | lc | escape_once }}
 
-                    {% if order.discount.discount_type == "fixed" %}
+                    {% if order.discount.fixed? and item.discount != blank %}
                       -{{ order.discount.amount | money_with_currency: order.discount.currency }}
                     {% endif %}
                   </td>
 
-                  {% if order.discount.discount_type == "percentage" %}
+                  {% if order.discount.percentage? and item.discount != blank %}
                     <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                   {% else %}
                     <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
@@ -557,12 +569,12 @@
                 <td>
                   {{ 'ecommerce.invoice.discount_cart' | lc | escape_once }}
 
-                  {% if order.discount.discount_type == "fixed" %}
+                  {% if order.discount.fixed? %}
                     -{{ order.discount.amount | money_with_currency: order.discount.currency }}
                   {% endif %}
                 </td>
 
-                {% if order.discount.discount_type == "percentage" %}
+                {% if order.discount.percentage? %}
                   <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                 {% else %}
                   <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>
@@ -581,7 +593,7 @@
 
               {% if order.cart_rules_applied != true
                 and order.discount
-                and discount_applies_to_cart_and_or_shipping
+                and order.discount.applies_to_shipping?
               %}
                 <tr>
                   <td>
@@ -591,12 +603,12 @@
                       {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc | escape_once }}
                     {% endif %}
 
-                    {% if order.discount.discount_type == "fixed" %}
+                    {% if order.discount.fixed? %}
                       -{{ order.discount.amount | money_with_currency: order.discount.currency }}
                     {% endif %}
                   </td>
 
-                  {% if order.discount.discount_type == "percentage" %}
+                  {% if order.discount.percentage? %}
                     <td>-{{ order.discount.amount | strip_insignificant_zeros }}%</td>
                   {% else %}
                     <td>{{ 'ecommerce.invoice.items' | lcc: 1 }}</td>

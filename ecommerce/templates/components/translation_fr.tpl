@@ -3,17 +3,17 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Infos sur l’achat",
-        "intro": "Nous vous remercions de votre achat dans notre boutique en ligne, %{store_name}. Vous avez choisi l'option de paiement hors connexion, voici donc la facture ainsi que les instructions concernant le paiement. Nous allons procéder à la livraison une fois le paiement reçu. Des questions ? Contactez-nous à tout moment à %{store_email}.",
+        "intro": "Nous vous remercions pour votre achat dans notre boutique en ligne, %{store_name}. Vous avez choisi l'option de paiement hors connexion, voici donc la facture ainsi que les instructions concernant le paiement. Nous procéderons à la livraison une fois le paiement reçu. Des questions ? Contactez-nous à tout moment à %{store_email}.",
         "preview": "Merci pour votre achat.",
         "subject": "Facture %{code} à part de %{store_name}"
       },
       "payment_notification": {
-        "body": "Merci pour votre achat chez %{store_name}. Nous avons bien réceptionné votre paiement et annexé la facture réglée en pièce jointe.\nVotre commande sera expédiée dès que possible. Des questions? Entrez en contact via %{store_email}.",
+        "body": "Merci pour votre achat chez %{store_name}. Nous avons bien réceptionné votre paiement et ajouté la facture réglée en pièce jointe.\nVotre commande sera expédiée dès que possible. Des questions? Contactez-nous via %{store_email}.",
         "heading": "Confirmation d'achat",
         "subject": "Facture %{code} à part de %{store_name}"
       },
       "payment_status_notification": {
-        "body": "Votre paiement pour la commande %{code} a été confirmé et la livraison sera exécutée dès que possible.",
+        "body": "Votre paiement pour la commande %{code} a été confirmé et elle sera livrée dès que possible.",
         "heading": "Paiement accepté",
         "subject": "Paiement confirmé pour la commande %{code}"
       }

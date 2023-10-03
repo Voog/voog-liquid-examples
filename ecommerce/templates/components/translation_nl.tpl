@@ -3,12 +3,12 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Aankoopinformatie",
-        "intro": "Bedankt voor uw aankoop in onze webwinkel, %{store_name}. U hebt gekozen voor de offline betaaloptie, daarom zijn hier de factuur en de betaalinstructies. Wij verzenden uw bestelling zodra de betaling binnen is. Hebt u nog vragen? Neem dan contact met ons op via %{store_email}.",
+        "intro": "Bedankt voor uw aankoop in onze webwinkel %{store_name}. U hebt gekozen voor de offline betaaloptie, daarom zijn hier de factuur en de betaalinstructies. Wij verzenden uw bestelling zodra de betaling binnen is. Hebt u nog vragen? Neem dan contact met ons op via %{store_email}.",
         "preview": "Bedankt voor uw aankoop.",
         "subject": "Factuur %{code} van %{store_name}"
       },
       "payment_notification": {
-        "body": "Bedankt voor uw aankoop bij %{store_name}. Wij hebben uw betaling ontvangen en hebben u de voldaan-factuur als bijlage meegestuurd.\nUw bestelling wordt zo snel mogelijk verstuurd. Vragen? Neem contact op via %{store_email}.",
+        "body": "Bedankt voor uw aankoop bij %{store_name}. We hebben uw betaling ontvangen en hebben u de voldaan-factuur als bijlage meegestuurd.\nUw bestelling wordt zo snel mogelijk verstuurd. Hebt u nog vragen? Neem dan contact op via %{store_email}.",
         "heading": "Aankoopbevestiging",
         "subject": "Factuur %{code} van %{store_name}"
       },

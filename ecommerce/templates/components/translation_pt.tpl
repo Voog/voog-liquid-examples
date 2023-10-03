@@ -8,7 +8,7 @@
         "subject": "Fatura %{code} de %{store_name}"
       },
       "payment_notification": {
-        "body": "Obrigado por sua compra em %{store_name}. Nós recebemos com sucesso seu pagamento. Você pode encontrar a fatura paga no anexo.\nA sua encomenda será enviada assim que possível. Perguntas? Entre em contacto através de %{store_email}.",
+        "body": "Obrigado por sua compra em %{store_name}. Nós recebemos com sucesso seu pagamento. Você pode encontrar a fatura paga no anexo.\nA sua encomenda será enviada assim que possível. Perguntas? Entre em contato em %{store_email}.",
         "heading": "Confirmação de compra",
         "subject": "Fatura %{code} de %{store_name}"
       },

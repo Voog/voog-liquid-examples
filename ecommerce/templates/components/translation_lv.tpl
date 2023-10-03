@@ -3,17 +3,17 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Pasūtījuma informācija",
-        "intro": "Paldies par jūsu pirkumu mūsu e-veikalā %{store_name}. Jūs izvēlējāties bezsaistes maksāšanas iespēju, tāpēc šeit ir rēķins un maksājuma instrukcijas. Mēs uzsāksim piegādi, tiklīdz tiks saņemts maksājums. Jautājumi? Sazinieties ar mums jebkurā laikā, rakstot uz %{store_email}.",
+        "intro": "Paldies par pirkumu mūsu interneta veikalā %{store_name}. Jūs izvēlējāties bezsaistes maksājuma iespēju, tāpēc šeit ir rēķins un maksājuma norādījumi. Mēs uzsāksim piegādi, tiklīdz būs saņemts maksājums. Jautājumi? Sazinieties ar mums jebkurā laikā, rakstot uz %{store_email}.",
         "preview": "Paldies par Jūsu pirkumu.",
         "subject": "Rēķins %{code} no %{store_name}"
       },
       "payment_notification": {
-        "body": "Paldies par jūsu pirkumu %{store_name}. Mēs esam veiksmīgi saņēmuši jūsu maksājumu. Apmaksāto rēķinu jūs varat apskatīt pielikumā.\nJūsu pasūtījums tiks nosūtīts pēc iespējas ātrāk. Jautājumi? Sazinieties rakstot uz %{store_email}.",
+        "body": "Paldies par pirkumu  %{store_name} veikalā. Esam veiksmīgi saņēmuši Jūsu maksājumu. Apmaksāto rēķinu varat atrast pielikumā.\nJūsu pasūtījums tiks piegādāts pēc iespējas ātrāk. Jautājumi? Sazinieties, rakstot uz %{store_email}.",
         "heading": "Pasūtījuma apstiprinājums",
         "subject": "Rēķins %{code} no %{store_name}"
       },
       "payment_status_notification": {
-        "body": "Jūsu maksājums par pasūtījumu %{code} ir apstiprināts un tas tiks nosūtīts drīzumā.",
+        "body": "Jūsu maksājums par pasūtījumu %{code} ir apstiprināts, un tas tiks piegādāts pēc iespējas ātrāk.",
         "heading": "Maksājums apstiprināts",
         "subject": "Pasūtījuma %{code} maksājums apstiprināts"
       }

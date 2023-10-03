@@ -27,10 +27,6 @@
   {% endunless %}
 
   {% if order.discount %}
-    {% if order.discount.applies_to == "shipping" or order.discount.applies_to == "cart_and_shipping" %}
-      {% assign discount_applies_to_cart_and_or_shipping = true %}
-    {% endif %}
-
     {% if order.discount.applies_to == "cart_and_shipping" %}
       {% assign order_total_original_amount = order.items_original_amount | plus: order.shipping_original_amount %}
       {% assign order_total_subtotal_amount = order.items_subtotal_amount | plus: order.shipping_subtotal_amount %}
@@ -43,7 +39,7 @@
       {% assign order_total_discount = 0 %}
     {% endif %}
 
-    {% if order.discount.applies_to == "cart" or order.discount.applies_to == "shipping" or order.discount.applies_to == "cart_and_shipping" %}
+    {% if order.discount.applies_to_cart? or order.discount.applies_to_shipping? %}
       {% assign order_data_rows = order_data_rows | plus: 1 %}
     {% endif %}
   {% endif %}

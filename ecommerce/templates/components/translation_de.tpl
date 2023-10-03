@@ -3,17 +3,17 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Kaufinformationen",
-        "intro": "Vielen Dank für Ihren Einkauf in unserem Internetshop %{store_name}. Sie haben die Offline-Zahlungsoption gewählt, hierbei finden Sie die Rechnung und die Zahlungsanweisungen. Wir versenden die Artikel sobald die Zahlung eingegangen ist. Haben Sie Fragen? Kontaktieren Sie uns jederzeit unter %{store_email}.",
+        "intro": "Vielen Dank für Ihren Einkauf in unserem Internetshop %{store_name}. Sie haben die Offline-Zahlungsoption gewählt. Hiermit bekommen Sie die Rechnung und die Zahlungsanweisungen. Wir versenden die Artikel sobald die Zahlung eingegangen ist. Haben Sie Fragen? Kontaktieren Sie uns jederzeit unter %{store_email}.",
         "preview": "Vielen Dank für Ihren Einkauf.",
         "subject": "Rechnung %{code} von %{store_name}"
       },
       "payment_notification": {
-        "body": "Vielen Dank für Ihren Einkauf bei %{store_name}. Wir haben Ihre Zahlung erfolgreich erhalten und Sie können die bezahlte Rechnung in der Anlage finden.\nIhre Bestellung wird schnellstmöglich verschickt. Haben Sie Fragen? Kontaktieren Sie uns unter %{store_email}.",
+        "body": "Vielen Dank für Ihren Einkauf bei %{store_name}. Wir haben Ihre Zahlung erfolgreich erhalten und Sie können die bezahlte Rechnung in der Anlage finden.\nIhre Bestellung wird schnellstmöglich geliefert. Haben Sie Fragen? Kontaktieren Sie uns unter %{store_email}.",
         "heading": "Kaufbestätigung",
         "subject": "Rechnung %{code} von %{store_name}"
       },
       "payment_status_notification": {
-        "body": "Ihre Zahlung für die Bestellung %{code} wurde bestätigt und es wird so schnell wie möglich versendet werden.",
+        "body": "Ihre Zahlung für die Bestellung %{code} wurde bestätigt. Sie wird so schnell wie möglich geliefert.",
         "heading": "Bezahlung bestätigt",
         "subject": "Zahlung für die Bestellung %{code} bestätigt"
       }

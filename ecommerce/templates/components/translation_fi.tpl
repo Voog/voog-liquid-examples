@@ -3,17 +3,17 @@
     "customer_mailer": {
       "offline_invoice_notification": {
         "heading": "Tilaustiedot",
-        "intro": "Kiitos ostostasi verkkokaupassamme, %{store_name}. Valitsit offline-maksun. Tässä lasku ja maksutiedot. Toimitamme tilauksen kun tilaus on maksettu ja suoritus on kuitattu. Kysymyksiä? Ota yhteyttä sähköpostilla osoitteeseen %{store_email}.",
+        "intro": "Kiitos ostostasi verkkokaupassamme %{store_name}. Valitsit offline-maksun, joten tässä on lasku ja maksuohjeet. Toimitamme tilauksen, kun olemme vastaanottaneet maksun. Kysymyksiä? Ota yhteyttä lähettämällä sähköpostia osoitteeseen %{store_email}.",
         "preview": "Kiitos ostoksestasi.",
         "subject": "Lasku %{code} kaupasta %{store_name}"
       },
       "payment_notification": {
-        "body": "Kiitos tilauksestasi verkkokaupassamme %{store_name}. Olemme vastaanottaneet maksunne onnistuneesti. Löydät kuitin maksusta liitteessä.\nTilauksesi lähetetään mahdollisimman pian. Onko sinulla kysymyksiä? Ota yhteyttä sähköpostitse osoitteeseen %{store_email}.",
+        "body": "Kiitos tilauksestasi verkkokaupassamme %{store_name}. Olemme vastaanottaneet maksusi onnistuneesti. Kuitti maksusta on liitteessä.\nTilauksesi lähetetään mahdollisimman pian. Onko sinulla kysymyksiä? Ota yhteyttä lähettämällä sähköpostia osoitteeseen %{store_email}.",
         "heading": "Maksun kuittaus",
         "subject": "Kuitti %{code} kaupasta %{store_name}"
       },
       "payment_status_notification": {
-        "body": "Maksusi tilaukselle %{code} on vahvistettu ja toimitetaan pian.",
+        "body": "Maksusi tilaukselle %{code} on vahvistettu. Tilaus toimitetaan mahdollisimma pian.",
         "heading": "Maksu vahvistettu",
         "subject": "Maksu on hyväksytty tilaukselle %{code}"
       }
