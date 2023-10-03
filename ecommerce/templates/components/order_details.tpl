@@ -45,11 +45,10 @@
                 {% assign items_displayed_discount = items_displayed_discount | plus: item_discount %}
                 <br>
                 <span style="color: #8d9091 !important; font-size: 12px !important; font-weight: 600 !important; line-height: 16px !important">
-                {% if order.discount.discount_type == "fixed" %}
-                  -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-                {% endif %}
-                {% if order.discount.discount_type == "percentage" %}
-                  -{{ order.discount.amount | strip_insignificant_zeros }}%
+                {% if order.discount.percentage? and item.discount != blank %}
+                  -{{ order.discount.amount | strip_insignificant_zeros }}% ({{ item_discount | money_with_currency: order.discount.currency }})
+                {% else %}
+                  {{ item_discount | money_with_currency: order.discount.currency }}
                 {% endif %}
               </span>
               {% endif %}
@@ -82,15 +81,15 @@
       <tbody>
         {% if order.discount and order.discount.applies_to == "cart" %}
         {% assign items_displayed_discount = items_displayed_discount | plus: order_total_discount %}
-        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right !important">
+        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right">
           <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
             {{ 'ecommerce.invoice.discount_cart' | lc }} (
-            {% if order.discount.discount_type == "fixed" %}
+            {%- if order.discount.fixed? -%}
               -{{ order.discount.amount | money_with_currency: order.discount.currency }}
-            {% endif %}
-            {% if order.discount.discount_type == "percentage" %}
+            {%- endif -%}
+            {%- if order.discount.percentage? -%}
               -{{ order.discount.amount | strip_insignificant_zeros }}%
-            {% endif %})
+            {%- endif -%})
           </td>
           <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-left: 32px !important; white-space: nowrap !important; width: 1px !important">
             {{ order_total_discount | money_with_currency: order.currency }}
@@ -98,7 +97,7 @@
         </tr>
         {% endif %}
         {% unless order.shipping_method == blank %}
-        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right !important">
+        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right">
           <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
             {{ 'ecommerce.invoice.shipping' | lc }}
             ({{ order.shipping_method.name }}{% if order.shipping_method.option != blank %} — {{ order.shipping_method.option }}{% endif %})
@@ -107,19 +106,19 @@
             {{ order.shipping_original_amount | money_with_currency: order.currency }}
           </td>
         </tr>
-        {% if order.cart_rules_applied != true and order.discount and discount_applies_to_cart_and_or_shipping %}
-        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right !important">
+        {% if order.cart_rules_applied != true and order.discount and order.discount.applies_to_shipping? %}
+        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right">
           <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
             {% if order.discount.applies_to == "shipping" %}
               {{ 'ecommerce.invoice.discount_shipping' | lc }}
             {% else %}
-            {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc }}
+              {{ 'ecommerce.invoice.discount_cart_and_shipping' | lc }}
             {% endif %}
 
-            {% if order.discount.discount_type == "fixed" %}
+            {% if order.discount.fixed? %}
               (-{{ order.discount.amount | money_with_currency: order.discount.currency }})
             {% endif %}
-            {% if order.discount.discount_type == "percentage" %}
+            {% if order.discount.percentage? %}
               (-{{ order.discount.amount | strip_insignificant_zeros }}%)
             {% endif %}
 
@@ -136,7 +135,7 @@
         {% endif %}
         {% endunless %}
         {% if order.cart_rules_applied and order.effective_discount? %}
-        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right !important">
+        <tr style="color: #8d9091 !important; font-size: 14px !important; font-weight: 500 !important; line-height: 28px !important; text-align: right !important" align="right">
           <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
             {{ 'ecommerce.invoice.discount' | lc }}
           </td>

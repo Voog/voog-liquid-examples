@@ -31,36 +31,43 @@
                 <![endif]-->
                 <div style="direction: ltr; display: inline-block; font-size: 0px; text-align: left; vertical-align: top; width: 100%" align="left">
                   <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; vertical-align: top" width="100%">
-                    <tr>
-                      <td align="left" style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 12px 0px 15px; word-break: break-word">
-                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse: collapse; border-spacing: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
-                          <tbody>
-                            <tr>
-                              <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 32px">
-                                <img alt="Voog logo" height="32" src="//static.voog.com/libs/edicy-mailers/latest/logo-black-square.png" style="-ms-interpolation-mode: bicubic; border: 0; display: block; font-size: 13px; height: 32px; line-height: 100%; outline: none; text-decoration: none; width: 100%" width="32">
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 10px 0px; word-break: break-word">
-                        <p style="border-top-color: #efefef; border-top-style: solid; border-top-width: 1px; display: block; font-size: 1px; margin: 0 auto; width: 100%">
-                        </p>
-                        <!--[if mso | IE]>
-                          <table
-                            align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #efefef;font-size:1px;margin:0px auto;width:560px;" role="presentation" width="560px"
-                          >
-                            <tr>
-                              <td style="height:0;line-height:0;">
-                                &nbsp;
-                              </td>
-                            </tr>
+                    {%- if store.invoice_branding or store.image? -%}
+                      <tr>
+                        <td align="left" style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 12px 0px 15px; word-break: break-word">
+                          <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse: collapse; border-spacing: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
+                            <tbody>
+                              <tr>
+                                <td style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt">
+                                  {%- if store.image? -%}
+                                    {%- assign image_width = store.image.thumbnail.aspect_ratio | times: 32.0 | round -%}
+                                    <img height="32" src="{{ store.image.thumbnail.url }}" alt="{{ store.company_name | escape_once }}" style="-ms-interpolation-mode: bicubic; border: 0; display: block; font-size: 13px; line-height: 100%; outline: none; text-decoration: none; height: 32px; width: 100%" width="{{ image_width }}" />
+                                  {%- else -%}
+                                    <img alt="Voog logo" height="32" src="//static.voog.com/libs/edicy-mailers/latest/logo-black-square.png" style="-ms-interpolation-mode: bicubic; border: 0; display: block; font-size: 13px; height: 32px; line-height: 100%; outline: none; text-decoration: none; width: 100%" width="32" />
+                                  {%- endif -%}
+                                </td>
+                              </tr>
+                            </tbody>
                           </table>
-                        <![endif]-->
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 10px 0px; word-break: break-word">
+                          <p style="border-top-color: #efefef; border-top-style: solid; border-top-width: 1px; display: block; font-size: 1px; margin: 0 auto; width: 100%">
+                          </p>
+                          <!--[if mso | IE]>
+                            <table
+                              align="center" border="0" cellpadding="0" cellspacing="0" style="border-top:solid 1px #efefef;font-size:1px;margin:0px auto;width:560px;" role="presentation" width="560px"
+                            >
+                              <tr>
+                                <td style="height:0;line-height:0;">
+                                  &nbsp;
+                                </td>
+                              </tr>
+                            </table>
+                          <![endif]-->
+                        </td>
+                      </tr>
+                    {%- endif -%}
                     <tr>
                       <td style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 0px; word-break: break-word">
                         <!--[if mso | IE]>
@@ -112,7 +119,7 @@
                         </table>
                       </td>
                     </tr>
-                    
+
                     <tr>
                       <td style="border-collapse: collapse; font-size: 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding: 32px 0px 16px; word-break: break-word">
                         <p style="border-top-color: #efefef; border-top-style: solid; border-top-width: 1px; display: block; font-size: 1px; margin: 0 auto; width: 100%"></p>
