@@ -53,6 +53,7 @@
           "recipient": "Saņēmējs",
           "shipping": "Piegāde",
           "shipping_address": "Piegādes adrese",
+          "sku": "Produkta kods",
           "total": "Kopā",
           "vat": "PVN"
         }

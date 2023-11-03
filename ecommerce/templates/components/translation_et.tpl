@@ -52,6 +52,7 @@
           "recipient": "Saaja nimi",
           "shipping": "Kohaletoimetamine",
           "shipping_address": "Tarne aadress",
+          "sku": "Tootekood",
           "total": "Kokku",
           "vat": "KM"
         }

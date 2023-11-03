@@ -52,6 +52,7 @@
           "recipient": "Ontvanger",
           "shipping": "Verzending",
           "shipping_address": "Verzendadres",
+          "sku": "Productcode",
           "total": "Totaal",
           "vat": "BTW"
         }

@@ -52,6 +52,7 @@
           "recipient": "Empfänger",
           "shipping": "Versand",
           "shipping_address": "Versandanschrift",
+          "sku": "Produktcode",
           "total": "Insgesamt",
           "vat": "MwSt"
         }

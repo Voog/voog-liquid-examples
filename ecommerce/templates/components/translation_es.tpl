@@ -52,6 +52,7 @@
           "recipient": "Destinatario",
           "shipping": "Envío",
           "shipping_address": "Dirección de envío",
+          "sku": "Código de producto",
           "total": "Total",
           "vat": "IVA"
         }
