@@ -136,6 +136,19 @@
         page-break-inside: avoid;
       }
 
+      .product-sku {
+        font-size: 12px;
+        color: #8d9091;
+      }
+
+      .discount-summary td:first-child {
+        text-align: right;
+      }
+
+      .price-summary td:first-child  {
+        text-align: right;
+      }
+
       .note {
         padding-top: 18pt;
       }
@@ -317,6 +330,15 @@
                 <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
               </tr>
 
+              {% if item.product_sku != blank %}
+                {% assign order_data_rows = order_data_rows | plus: 1 %}
+                <tr>
+                  <td class="product-sku" colspan="4">
+                    {{ 'ecommerce.invoice.sku' | lc | escape_once }}: {{ item.product_sku | escape_once }}
+                  </td>
+                </tr>
+              {% endif %}
+
               {% if order.discount != blank and order.discount.applies_to_cart? %}
                 {% assign display_discount_row = false %}
               {% elsif item.has_item_discount == false %}
@@ -458,10 +480,8 @@
             </tr>
 
             {% if order.effective_discount? %}
-              <tr>
-                <td></td>
-                <td></td>
-                <td>{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
+              <tr class="discount-summary">
+                <td colspan="3">{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
                 <td>
                   -{{ order.effective_discount_amount | money_with_currency: order.currency }}
                 </td>
@@ -488,9 +508,9 @@
             {% endfor %}
 
             <tr class="price-summary">
-              <td></td>
-              <td></td>
-              <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
+              <td colspan="3">
+                <b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b>
+              </td>
               <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
             </tr>
           </tbody>
@@ -524,6 +544,15 @@
                 <td>{{ 'ecommerce.invoice.items' | lcc: item.quantity }}</td>
                 <td>{{ item_products_original_price | money_with_currency: order.currency }}</td>
               </tr>
+
+              {% if item.product_sku != blank %}
+                {% assign order_data_rows = order_data_rows | plus: 1 %}
+                <tr>
+                  <td class="product-sku" colspan="4">
+                    {{ 'ecommerce.invoice.sku' | lc | escape_once }}: {{ item.product_sku | escape_once }}
+                  </td>
+                </tr>
+              {% endif %}
 
               {% if order.discount != blank and order.discount.applies_to_cart? %}
                 {% assign display_discount_row = false %}
@@ -661,9 +690,10 @@
               </tr>
 
               {% if order.effective_discount? %}
-                <tr>
-                  <td></td>
-                  <td>{{ 'ecommerce.invoice.total_discount' | lc | escape_once }}</td>
+                <tr class="discount-summary">
+                  <td colspan="2">
+                    {{ 'ecommerce.invoice.total_discount' | lc | escape_once }}
+                  </td>
                   <td>
                     -{{ order.effective_discount_amount | money_with_currency: order.currency }}
                   </td>
@@ -690,8 +720,9 @@
             {% endif %}
 
             <tr class="price-summary">
-              <td></td>
-              <td><b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b></td>
+              <td colspan="2">
+                <b>{{ 'ecommerce.invoice.to_be_paid' | lc | escape_once }}</b>
+              </td>
               <td><b>{{ order.total_amount | money_with_currency: order.currency }}</b></td>
             </tr>
           </tbody>

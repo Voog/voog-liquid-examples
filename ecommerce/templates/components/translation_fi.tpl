@@ -52,6 +52,7 @@
           "recipient": "Vastaanottaja",
           "shipping": "Toimituskulut",
           "shipping_address": "Toimitusosoite",
+          "sku": "Tuotekoodi",
           "total": "Yhteensä",
           "vat": "ALV"
         }

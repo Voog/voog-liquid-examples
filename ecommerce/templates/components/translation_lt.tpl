@@ -54,6 +54,7 @@
           "recipient": "Gavėjas",
           "shipping": "Pristatymas",
           "shipping_address": "Pristatymo adresas",
+          "sku": "Product code",
           "total": "Iš viso",
           "vat": "PVM"
         }

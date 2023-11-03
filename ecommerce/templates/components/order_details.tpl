@@ -29,11 +29,22 @@
           {% assign item_products_original_price = item.original_price | times: item.quantity %}
           <tr style="border-bottom-color: #efefef !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; font-size: 14px !important; font-weight: 600 !important; line-height: 20px !important">
             <td style="border-collapse: collapse; font-weight: 700 !important; height: 80px !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-left: 0px !important; white-space: normal !important; width: 67% !important">
-              {{ item.product_name }}<br>
-              <span style="color: #8d9091 !important; font-size: 12px !important; font-weight: 600 !important; line-height: 16px !important">
-                {% unless item.note == blank %} ({{ item.note }}){% endunless %}{% if item.product_is_variant %}
-                {{ item.product_variant_description }}{% endif %}
-              </span>
+              {{ item.product_name }}
+
+              {% if item.note != blank or item.product_is_variant %}
+                <br>
+                <span style="color: #8d9091 !important; font-size: 12px !important; font-weight: 600 !important; line-height: 16px !important">
+                  {% if item.product_is_variant %} {{ item.product_variant_description }}{% endif %}
+                  {% unless item.note == blank %} ({{ item.note }}){% endunless %}
+                </span>
+              {% endif %}
+
+              {% if item.product.sku %}
+                <br>
+                <span style="color: #8d9091 !important; font-size: 12px !important; font-weight: 600 !important; line-height: 16px !important">
+                  {{ translations.ecommerce_core.shared.mailers.order_details.sku }}: {{ item.product.sku }}
+                </span>
+              {% endif %}
             </td>
             <td style="border-collapse: collapse; height: 80px !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-left: 20px !important; white-space: nowrap !important">
               {{ 'ecommerce.invoice.items' | lcc: item.quantity }}

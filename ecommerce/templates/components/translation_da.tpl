@@ -52,6 +52,7 @@
           "recipient": "Recipient",
           "shipping": "Shipping",
           "shipping_address": "Shipping address",
+          "sku": "Product code",
           "total": "Totalt",
           "vat": "VAT"
         }
