@@ -26,7 +26,7 @@
     <table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse: collapse; border: none; color: #1b2124; font-family: Sharp Sans, Avenir Next, Avenir, Helvetica Neue, Helvetica, sans-serif; font-size: 16px; line-height: 28px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; table-layout: auto; width: 100%">
       <tbody>
         {% for item in order.items %}
-          {% assign item_products_original_price = item.original_price | times: item.quantity %}
+          {% assign item_products_original_price = item.original_subtotal_amount %}
           <tr style="border-bottom-color: #efefef !important; border-bottom-style: solid !important; border-bottom-width: 1px !important; font-size: 14px !important; font-weight: 600 !important; line-height: 20px !important">
             <td style="border-collapse: collapse; font-weight: 700 !important; height: 80px !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; padding-left: 0px !important; white-space: normal !important; width: 67% !important">
               {{ item.product_name }}
