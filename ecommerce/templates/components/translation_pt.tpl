@@ -16,6 +16,13 @@
         "body": "Seu pagamento do pedido %{code} foi confirmado e ele será enviado o quanto antes.",
         "heading": "Pagamento confirmado",
         "subject": "Pagamento confirmado do pedido %{code}"
+      },
+      "shipping_notification": {
+        "body": "A sua encomenda %{code} de %{store_name} foi enviada. Dúvidas? Contacte-nos em %{store_email}.",
+        "heading": "A sua encomenda está a caminho",
+        "subject": "A encomenda %{code} foi enviada",
+        "tracking_code": "O seu código de rastreio é <b>%{code}</b>.",
+        "track_shipment": "Acompanhe a sua encomenda aqui."
       }
     },
     "shared": {

@@ -16,6 +16,13 @@
         "body": "Sinu tellimus %{code} on kinnitatud ja täidetakse esimesel võimalusel.",
         "heading": "Makse on kinnitatud",
         "subject": "Tellimuse %{code} makse on kinnitatud"
+      },
+      "shipping_notification": {
+        "body": "Sinu tellimus %{code} poest %{store_name} on saadetud. Küsimusi? Võta meiega ühendust aadressil %{store_email}.",
+        "heading": "Tellimus on teel",
+        "subject": "Tellimus %{code} on välja saadetud",
+        "tracking_code": "Sinu jälgimiskood on <b>%{code}</b>.",
+        "track_shipment": "Jälgi oma saadetist siit."
       }
     },
     "shared": {

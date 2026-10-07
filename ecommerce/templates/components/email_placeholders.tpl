@@ -11,5 +11,6 @@
 {% endcapture -%}
 
 {%- assign placeholders = placeholders_str | json_parse -%}
+{%- assign linkTemplate = '<a href="%link_href%" class="blue-link">%link_label%</a>' -%}
 {%- assign boldLinkTemplate = '<a href="%link_href%" class="bold-link">%link_label%</a>' -%}
 {%- assign emailLinkTemplate = '<a href="mailto:%email%" class="blue-link">%email%</a>' -%}

@@ -16,6 +16,13 @@
         "body": "Jūsu maksājums par pasūtījumu %{code} ir apstiprināts, un tas tiks piegādāts pēc iespējas ātrāk.",
         "heading": "Maksājums apstiprināts",
         "subject": "Pasūtījuma %{code} maksājums apstiprināts"
+      },
+      "shipping_notification": {
+        "body": "Jūsu pasūtījums %{code} no %{store_name} ir nosūtīts. Jautājumi? Sazinieties ar mums uz %{store_email}.",
+        "heading": "Jūsu pasūtījums ir ceļā",
+        "subject": "Pasūtījums %{code} ir nosūtīts",
+        "tracking_code": "Jūsu izsekošanas kods ir <b>%{code}</b>.",
+        "track_shipment": "Sekojiet piegādei šeit."
       }
     },
     "shared": {
