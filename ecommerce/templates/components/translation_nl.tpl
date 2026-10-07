@@ -16,6 +16,13 @@
         "body": "Uw betaling voor bestelling %{code} is goedgekeurd en uw bestelling zal zo snel mogelijk worden verzonden.",
         "heading": "Betaling goedgekeurd",
         "subject": "Betaling goedgekeurd voor bestelling %{code}"
+      },
+      "shipping_notification": {
+        "body": "Uw bestelling %{code} uit %{store_name} is verzonden. Vragen? Neem contact met ons op via %{store_email}.",
+        "heading": "Uw bestelling is onderweg",
+        "subject": "Bestelling %{code} is verzonden",
+        "tracking_code": "Uw trackingcode is <b>%{code}</b>.",
+        "track_shipment": "Volg uw verzending hier."
       }
     },
     "shared": {

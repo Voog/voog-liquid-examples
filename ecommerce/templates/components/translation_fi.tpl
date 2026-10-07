@@ -16,6 +16,13 @@
         "body": "Maksusi tilaukselle %{code} on vahvistettu. Tilaus toimitetaan mahdollisimma pian.",
         "heading": "Maksu vahvistettu",
         "subject": "Maksu on hyväksytty tilaukselle %{code}"
+      },
+      "shipping_notification": {
+        "body": "Tilauksesi %{code} kaupasta %{store_name} on lähetetty. Kysyttävää? Ota yhteyttä osoitteeseen %{store_email}.",
+        "heading": "Tilauksesi on matkalla",
+        "subject": "Tilaus %{code} on lähetetty",
+        "tracking_code": "Seurantakoodisi on <b>%{code}</b>.",
+        "track_shipment": "Seuraa toimitusta tästä."
       }
     },
     "shared": {

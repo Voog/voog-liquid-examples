@@ -16,6 +16,13 @@
         "body": "Ihre Zahlung für die Bestellung %{code} wurde bestätigt. Sie wird so schnell wie möglich geliefert.",
         "heading": "Bezahlung bestätigt",
         "subject": "Zahlung für die Bestellung %{code} bestätigt"
+      },
+      "shipping_notification": {
+        "body": "Ihre Bestellung %{code} aus dem Shop %{store_name} wurde versandt. Fragen? Kontaktieren Sie uns unter %{store_email}.",
+        "heading": "Ihre Bestellung ist auf dem Weg",
+        "subject": "Bestellung %{code} wurde versandt",
+        "tracking_code": "Ihr Sendungsnummer ist <b>%{code}</b>.",
+        "track_shipment": "Verfolgen Sie Ihre Lieferung hier."
       }
     },
     "shared": {

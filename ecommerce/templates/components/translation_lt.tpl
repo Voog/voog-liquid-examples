@@ -16,6 +16,13 @@
         "body": "Jūsų užsakymo %{code} mokėjimas patvirtintas, ir užsakymą išsiųsime kuo įmanoma greičiau.",
         "heading": "Mokėjimas patvirtintas",
         "subject": "Užsakymo %{code} apmokėjimas patvirtintas"
+      },
+      "shipping_notification": {
+        "body": "Jūsų užsakymas %{code} iš %{store_name} buvo išsiųstas. Turite klausimų? Susisiekite su mumis adresu %{store_email}.",
+        "heading": "Jūsų užsakymas yra kelyje",
+        "subject": "Užsakymas %{code} išsiųstas",
+        "tracking_code": "Jūsų sekimo kodas yra <b>%{code}</b>.",
+        "track_shipment": "Sekite siuntinį čia."
       }
     },
     "shared": {

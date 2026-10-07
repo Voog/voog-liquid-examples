@@ -16,6 +16,13 @@
         "body": "Votre paiement pour la commande %{code} a été confirmé et elle sera livrée dès que possible.",
         "heading": "Paiement accepté",
         "subject": "Paiement confirmé pour la commande %{code}"
+      },
+      "shipping_notification": {
+        "body": "Votre commande %{code} de %{store_name} a été expédiée. Des questions ? Contactez-nous à %{store_email}.",
+        "heading": "Votre commande est en route",
+        "subject": "La commande %{code} a été expédiée",
+        "tracking_code": "Votre code de suivi est <b>%{code}</b>.",
+        "track_shipment": "Suivez votre colis ici."
       }
     },
     "shared": {
